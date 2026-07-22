@@ -35,7 +35,64 @@ export function Navbar() {
               }`}
             >
               <Heart className="w-4 h-4 text-emerald-400" />
-              <span>Nouveau Don</span>
+              <span>Accueil</span>
+            </Link>
+
+            <Link
+              href="/jeu"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                pathname?.startsWith("/jeu")
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v18l15-9L5 3z" />
+              </svg>
+              <span>Jeu</span>
+            </Link>
+
+            <Link
+              href="/a-propos"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                pathname?.startsWith("/a-propos")
+                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+              </svg>
+              <span>À propos</span>
+            </Link>
+
+            <Link
+              href="/contact"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                pathname?.startsWith("/contact")
+                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8a2 2 0 00-2-2h-3.586a1 1 0 00-.707.293l-1.414 1.414a1 1 0 01-.707.293H9a2 2 0 00-2 2v7a2 2 0 002 2h8a2 2 0 002-2V8z" />
+              </svg>
+              <span>Contact</span>
+            </Link>
+
+            <Link
+              href="/temoignages"
+              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                pathname?.startsWith("/temoignages")
+                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800"
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h6" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V12" />
+              </svg>
+              <span>Témoignages</span>
             </Link>
 
             <Link
@@ -47,7 +104,7 @@ export function Navbar() {
               }`}
             >
               <ShieldCheck className="w-4 h-4 text-indigo-400" />
-              <span>Espace Admin</span>
+              <span className="sr-only">Espace Admin</span>
             </Link>
           </nav>
         </div>

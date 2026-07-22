@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
-import { FortuneWheelGame } from "@/components/FortuneWheelGame";
-import { ClaimRewardModal } from "@/components/ClaimRewardModal";
+import dynamic from "next/dynamic";
 import { AudioAssistant } from "@/components/AudioAssistant";
 import { Sparkles, Trophy, Gift, ArrowRight, ShieldCheck, Play } from "lucide-react";
+const MiniTestimonials = dynamic(() => import('@/components/TestimonialsCarousel').then(m => m.MiniTestimonials), { ssr: false });
 import Link from "next/link";
 
 export default function HomePage() {
@@ -43,8 +43,18 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="flex justify-center pt-2">
+          <div className="flex flex-col items-center pt-2 gap-4">
             <AudioAssistant textToSpeak={homeAudioScript} label="Écouter le mode de jeu vocal 🔊" />
+
+            <div>
+              <Link
+                href="/jeu"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition-transform hover:scale-105 cursor-pointer shadow-lg"
+              >
+                <Play className="w-4 h-4" />
+                <span>Entrer dans le jeu</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -60,8 +70,16 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* THE GAME COMPONENT */}
-          <FortuneWheelGame onWin={handleWin} />
+          {/* THE GAME COMPONENT - retired. Provide a simple CTA to the game page. */}
+          <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 text-center">
+            <h3 className="text-lg font-bold">Le jeu est disponible</h3>
+            <p className="text-sm text-slate-400 mt-2">La roue de la chance et les boîtes cadeaux ont été retirées. Cliquez ci-dessous pour participer et remplir le formulaire.</p>
+            <div className="mt-4">
+              <Link href="/jeu" className="inline-flex items-center gap-2 px-5 py-2 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black">
+                Entrer dans le jeu
+              </Link>
+            </div>
+          </div>
         </div>
 
         {/* MANUAL TRIGGER BUTTON IN CASE USER WANTS TO RE-OPEN THE MODAL */}
@@ -100,14 +118,22 @@ export default function HomePage() {
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
+
+        {/* MINI TESTIMONIALS SLIDER (extrait en bas de la page d'accueil) */}
+        <div className="pt-8">
+          {/* lazy load testimonials data inline to avoid extra imports */}
+          <div className="max-w-5xl mx-auto px-4">
+            {/* Import the component client-side (dynamic with ssr:false) */}
+            {/* Rendu direct — le composant est chargé client-side via dynamic({ ssr:false }) */}
+            <MiniTestimonials testimonials={[
+              { name: 'María García', country: 'Espagne', avatar: 'https://i.pravatar.cc/150?img=11', message: 'J\u2019ai reçu 30\u2009000 dollars, je n’en reviens toujours pas !' },
+              { name: 'João Silva', country: 'Brésil', avatar: 'https://i.pravatar.cc/150?img=12', message: 'J\u2019ai gagné une voiture neuve, merci beaucoup !' },
+              { name: 'Lucía Fernández', country: 'Espagne', avatar: 'https://i.pravatar.cc/150?img=13', message: 'Service rapide et fiable, on m\u2019a offert une moto.' },
+            ]} />
+            </div>
+        </div>
       </main>
 
-      {/* AUTOMATIC POP-UP MODAL WHEN WINNING */}
-      <ClaimRewardModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        prizeName={wonPrizeName}
-      />
 
       <footer className="py-6 border-t border-slate-900 bg-slate-950 text-center text-xs text-slate-500">
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
