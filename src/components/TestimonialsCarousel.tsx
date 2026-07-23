@@ -65,35 +65,44 @@ export function TestimonialsCarousel({ testimonials }: { testimonials: Testimoni
 }
 
 export function MiniTestimonials({ testimonials }: { testimonials: Testimonial[] }) {
-  // show 2-3 small cards in horizontal autoplay scroll
   const containerRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
-    let pos = 0;
     const el = containerRef.current;
-    if (!el) return;
-    const totalScroll = el.scrollWidth - el.clientWidth;
+    if (!el || testimonials.length === 0) return;
+
+    let pos = 0;
+    const step = 1;
+    const totalScroll = Math.max(1, el.scrollWidth - el.clientWidth);
+
     const id = window.setInterval(() => {
-      pos += Math.max(1, Math.round(el.clientWidth / 10));
-      if (pos >= totalScroll) pos = 0;
-      el.scrollTo({ left: pos, behavior: "smooth" });
-    }, 3000);
+      pos += step;
+      if (pos >= totalScroll) {
+        pos = 0;
+      }
+      el.scrollTo({ left: pos, behavior: "auto" });
+    }, 60);
+
     return () => window.clearInterval(id);
-  }, []);
+  }, [testimonials.length]);
 
   return (
     <div className="w-full max-w-5xl mx-auto">
-      <div className="bg-slate-900 p-4 rounded-2xl border border-slate-800 shadow-sm">
-        <div ref={containerRef} className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2">
-          {testimonials.map((t, i) => (
-            <div key={t.name + i} className="min-w-[220px] bg-slate-800 p-3 rounded-xl flex-shrink-0">
+      <div className="rounded-2xl border border-emerald-100 bg-[#f8fcfa] p-4 shadow-sm">
+        <div ref={containerRef} className="flex gap-4 overflow-x-hidden py-2">
+          {[...testimonials, ...testimonials].map((t, i) => (
+            <div
+              key={`${t.name}-${i}`}
+              className="min-w-60 shrink-0 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm"
+            >
               <div className="flex items-center gap-3">
-                <img src={t.avatar} alt={t.name} className="w-12 h-12 rounded-full object-cover" />
+                <img src={t.avatar} alt={t.name} className="h-12 w-12 rounded-full object-cover" />
                 <div>
-                  <div className="font-semibold text-sm">{t.name}</div>
-                  <div className="text-xs text-slate-400">{t.country}</div>
+                  <div className="text-sm font-semibold text-slate-900">{t.name}</div>
+                  <div className="text-xs text-slate-500">{t.country}</div>
                 </div>
               </div>
-              <p className="text-xs text-slate-300 mt-3">{t.message}</p>
+              <p className="mt-3 text-sm leading-6 text-slate-600">“{t.message}”</p>
             </div>
           ))}
         </div>

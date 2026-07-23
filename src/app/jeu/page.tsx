@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { PageShell } from "@/components/PageShell";
+
 const DEFAULT_ADMIN_WHATSAPP = "2250700000000";
 
 function generateCode(length = 8) {
@@ -40,68 +42,85 @@ export default function JeuPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-12">
-      <div className="max-w-3xl mx-auto px-4">
-        <h1 className="text-3xl font-extrabold mb-6 text-center">Jeu</h1>
-
+    <div className="min-h-screen bg-(--color-bg) text-slate-900">
+      <PageShell
+        title="Jeu"
+        description="Commencez facilement, remplissez vos informations et obtenez votre code unique en quelques secondes."
+      >
         {!started ? (
-          <div className="text-center">
+          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-emerald-200 bg-(--color-surface-alt) p-8 text-center">
+            <h2 className="text-2xl font-semibold text-slate-900">Comment participer au jeu</h2>
+            <div className="max-w-2xl text-left text-sm text-slate-600">
+              <p className="mb-3 font-medium text-slate-700">Pour jouer au <strong>Projet Solidarité</strong> :</p>
+              <ol className="list-decimal space-y-2 pl-5">
+                <li>Cliquez sur le bouton <strong>“Entrer dans le jeu”</strong>.</li>
+                <li>Remplissez correctement le formulaire avec vos informations (<strong>Nom, Prénom, Pays, Numéro WhatsApp</strong>).</li>
+                <li>Une fois validé, le système génère automatiquement un <strong>code unique de 8 caractères alphanumériques</strong>.</li>
+                <li>Envoyez ce code aux organisateurs via WhatsApp.</li>
+                <li>Les organisateurs vérifient votre code et vous annoncent le <strong>lot gagné</strong>, qui vous sera ensuite remis.</li>
+              </ol>
+            </div>
             <button
               onClick={() => setStarted(true)}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm transition-transform hover:scale-105 cursor-pointer shadow-lg"
+              className="btn-primary"
             >
               Entrer dans le jeu
             </button>
-            <p className="text-sm text-slate-400 mt-3">Cliquez pour démarrer et remplir le formulaire de participation.</p>
           </div>
         ) : (
-          <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
+          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
             {!code ? (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label className="block text-sm text-slate-300 font-semibold">Nom</label>
-                  <input name="nom" required value={form.nom} onChange={handleChange} className="mt-1 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100" />
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="form-field">
+                    <label htmlFor="nom">Nom</label>
+                    <input id="nom" name="nom" required value={form.nom} onChange={handleChange} />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="prenom">Prénom</label>
+                    <input id="prenom" name="prenom" required value={form.prenom} onChange={handleChange} />
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm text-slate-300 font-semibold">Prénom</label>
-                  <input name="prenom" required value={form.prenom} onChange={handleChange} className="mt-1 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100" />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 font-semibold">Pays</label>
-                  <input name="pays" required value={form.pays} onChange={handleChange} className="mt-1 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100" />
-                </div>
-
-                <div>
-                  <label className="block text-sm text-slate-300 font-semibold">Numéro WhatsApp (ex: +22570...)</label>
-                  <input name="tel" required value={form.tel} onChange={handleChange} className="mt-1 w-full rounded-lg bg-slate-800 border border-slate-700 px-3 py-2 text-slate-100" />
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="form-field">
+                    <label htmlFor="pays">Pays</label>
+                    <input id="pays" name="pays" required value={form.pays} onChange={handleChange} />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="tel">Numéro WhatsApp</label>
+                    <input id="tel" name="tel" required value={form.tel} onChange={handleChange} placeholder="+22570..." />
+                  </div>
                 </div>
 
                 <div className="flex justify-end">
-                  <button type="submit" className="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold">Entrer dans le jeu</button>
+                  <button type="submit" className="btn-primary">Générer mon code</button>
                 </div>
               </form>
             ) : (
               <div className="space-y-4 text-center">
-                <p className="text-sm text-slate-300">Votre code généré :</p>
-                <div className="inline-flex items-center justify-center px-6 py-4 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xl tracking-widest">{code}</div>
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">Votre code généré</p>
+                <div className="inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-6 py-4 text-xl font-black tracking-[0.3em] text-white">
+                  {code}
+                </div>
 
                 <div className="space-y-2">
-                  <a href={buildWhatsAppUrl()} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-green-600 hover:bg-green-500 text-white font-bold">
+                  <a href={buildWhatsAppUrl()} target="_blank" rel="noreferrer" className="btn-primary">
                     Valider votre jeu
                   </a>
-                  <p className="text-xs text-slate-400">En cliquant, vous serez redirigé vers WhatsApp pour envoyer vos informations au donateur.</p>
+                  <p className="text-sm text-slate-600">Vous serez redirigé vers WhatsApp pour transmettre vos informations au donateur.</p>
                 </div>
 
                 <div className="pt-2">
-                  <Link href="/" className="text-sm text-emerald-300 underline">Retour à l'accueil</Link>
+                  <Link href="/" className="text-sm font-semibold text-emerald-700 underline">
+                    Retour à l’accueil
+                  </Link>
                 </div>
               </div>
             )}
           </div>
         )}
-      </div>
+      </PageShell>
     </div>
   );
 }

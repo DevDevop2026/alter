@@ -18,7 +18,6 @@ import {
   Gift,
 } from "lucide-react";
 import Link from "next/link";
-import { Navbar } from "@/components/Navbar";
 import { AudioAssistant } from "@/components/AudioAssistant";
 
 interface DonData {
@@ -200,7 +199,7 @@ function SuccessContent() {
       </div>
 
       {/* CODE DISPLAY CARD */}
-      <div className="p-6 sm:p-10 rounded-3xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-4 border-emerald-500 shadow-2xl relative overflow-hidden mb-8 text-center">
+      <div className="p-6 sm:p-10 rounded-3xl bg-linear-to-b from-slate-900 via-slate-900 to-slate-950 border-4 border-emerald-500 shadow-2xl relative overflow-hidden mb-8 text-center">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
           <ShieldCheck className="w-64 h-64 text-emerald-400" />
         </div>
@@ -240,7 +239,7 @@ function SuccessContent() {
 
       {/* GIANT WHATSAPP REDIRECTION BUTTON BANNER */}
       {whatsapp && (
-        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-900 border-2 border-emerald-500/50 mb-8 space-y-5 shadow-2xl">
+        <div className="p-6 sm:p-8 rounded-3xl bg-linear-to-r from-emerald-950 via-teal-950 to-slate-900 border-2 border-emerald-500/50 mb-8 space-y-5 shadow-2xl">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-4 text-center sm:text-left">
               <div className="w-14 h-14 rounded-2xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-2xl shrink-0 shadow-lg animate-pulse">
@@ -352,7 +351,6 @@ function SuccessContent() {
 export default function SuccessPage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      <Navbar />
       <main className="flex-1 py-6">
         <Suspense
           fallback={

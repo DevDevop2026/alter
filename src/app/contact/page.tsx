@@ -1,5 +1,7 @@
 "use client";
 
+import { PageShell } from "@/components/PageShell";
+
 const DEFAULT_ADMIN_WHATSAPP = "2250700000000";
 
 export default function ContactPage() {
@@ -9,27 +11,41 @@ export default function ContactPage() {
   const waLink = `https://wa.me/${cleaned}`;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-12">
-      <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-3xl font-extrabold mb-6 text-center">Contact</h1>
-
-        <div className="bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl space-y-4 text-center">
-          <p className="text-slate-300">Pour toute question ou validation de don, contactez directement le donateur via WhatsApp ou par email.</p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href={waLink} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-green-600 hover:bg-green-500 text-white font-bold">
-              WhatsApp
-            </a>
-
-            <a href={`mailto:${adminEmail}`} className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold">
-              Email
-            </a>
+    <div className="min-h-screen bg-(--color-bg) text-slate-900">
+      <PageShell
+        title="Contact"
+        eyebrow="WhatsApp • email"
+        description="Pour toute question, validation ou suivi de votre don, utilisez l’un des canaux de contact ci-dessous."
+      >
+        <div className="grid gap-4 lg:grid-cols-[1fr_0.9fr] lg:items-start">
+          <div className="rounded-3xl border border-emerald-100 bg-(--color-surface-alt) p-5">
+            <h2 className="text-xl font-semibold text-slate-900">Nous sommes à votre écoute</h2>
+            <p className="mt-2 text-sm text-slate-600">
+              Le contact direct permet de répondre rapidement à chaque demande et de garder un échange simple et rassurant.
+            </p>
+            <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+              <a href={waLink} target="_blank" rel="noreferrer" className="btn-primary">
+                WhatsApp
+              </a>
+              <a href={`mailto:${adminEmail}`} className="btn-secondary">
+                Envoyer un email
+              </a>
+            </div>
           </div>
 
-          <p className="text-xs text-slate-500">Numéro WhatsApp du donateur : <span className="font-mono">{adminNumber}</span></p>
-          <p className="text-xs text-slate-500">Email : <span className="font-mono">{adminEmail}</span></p>
+          <div className="info-card">
+            <h3 className="text-lg font-semibold text-slate-900">Informations de contact</h3>
+            <div className="mt-3 space-y-2 text-sm text-slate-600">
+              <p>
+                <span className="font-semibold text-slate-800">WhatsApp :</span> {adminNumber}
+              </p>
+              <p>
+                <span className="font-semibold text-slate-800">Email :</span> {adminEmail}
+              </p>
+            </div>
+          </div>
         </div>
-      </div>
+      </PageShell>
     </div>
   );
 }

@@ -2,109 +2,79 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Heart, ShieldCheck, Gift } from "lucide-react";
+import { useState } from "react";
+import { Gift, Menu, X } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  const navLinkClass = (target: string, activeClass: string) =>
+    `rounded-full px-3.5 py-2 text-sm font-medium transition-colors flex items-center ${
+      pathname === target || pathname?.startsWith(target)
+        ? activeClass
+        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+    }`;
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header className="sticky top-0 z-50 border-b border-[#dcefe4] bg-white/90 backdrop-blur-md">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
-              <Gift className="w-5 h-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-600 transition-transform group-hover:scale-105">
+              <Gift className="h-5 w-5" />
             </div>
             <div>
-              <span className="font-bold text-lg tracking-tight text-white block leading-tight">
-                Dons Spéciaux
-              </span>
-              <span className="text-xs text-slate-400 block font-mono">
-                Système de Code Unique
-              </span>
+              <span className="block text-lg font-bold tracking-tight text-slate-900">Dons Spéciaux</span>
+              <span className="block text-xs font-medium text-slate-500">Code unique • WhatsApp</span>
             </div>
           </Link>
 
-          <nav className="flex items-center gap-2">
-            <Link
-              href="/"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                pathname === "/"
-                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-            >
-              <Heart className="w-4 h-4 text-emerald-400" />
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition-colors hover:border-emerald-200 hover:text-emerald-700 md:hidden"
+            aria-label="Ouvrir le menu"
+            aria-expanded={open}
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+
+          <nav className="hidden items-center justify-end gap-2 md:flex">
+            <Link href="/" className={navLinkClass("/", "bg-emerald-50 text-emerald-700")}>
               <span>Accueil</span>
             </Link>
 
-            <Link
-              href="/jeu"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                pathname?.startsWith("/jeu")
-                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v18l15-9L5 3z" />
-              </svg>
+            <Link href="/jeu" className={navLinkClass("/jeu", "bg-emerald-50 text-emerald-700")}>
               <span>Jeu</span>
             </Link>
 
-            <Link
-              href="/a-propos"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                pathname?.startsWith("/a-propos")
-                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-              </svg>
+            <Link href="/a-propos" className={navLinkClass("/a-propos", "bg-blue-50 text-blue-700")}>
               <span>À propos</span>
             </Link>
 
-            <Link
-              href="/contact"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                pathname?.startsWith("/contact")
-                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8a2 2 0 00-2-2h-3.586a1 1 0 00-.707.293l-1.414 1.414a1 1 0 01-.707.293H9a2 2 0 00-2 2v7a2 2 0 002 2h8a2 2 0 002-2V8z" />
-              </svg>
+            <Link href="/contact" className={navLinkClass("/contact", "bg-blue-50 text-blue-700")}>
               <span>Contact</span>
             </Link>
+          </nav>
+        </div>
 
-            <Link
-              href="/temoignages"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                pathname?.startsWith("/temoignages")
-                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-pink-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h6" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V12" />
-              </svg>
-              <span>Témoignages</span>
+        <div className={`${open ? "max-h-96 opacity-100" : "max-h-0 opacity-0"} overflow-hidden border-t border-emerald-100 transition-all duration-300 md:hidden`}>
+          <nav className="flex flex-col gap-2 px-1 py-3">
+            <Link href="/" onClick={() => setOpen(false)} className={navLinkClass("/", "bg-emerald-50 text-emerald-700")}>
+              <span>Accueil</span>
             </Link>
 
-            <Link
-              href="/admin"
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
-                pathname?.startsWith("/admin")
-                  ? "bg-indigo-500/20 text-indigo-300 border border-indigo-500/30"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800"
-              }`}
-            >
-              <ShieldCheck className="w-4 h-4 text-indigo-400" />
-              <span className="sr-only">Espace Admin</span>
+            <Link href="/jeu" onClick={() => setOpen(false)} className={navLinkClass("/jeu", "bg-emerald-50 text-emerald-700")}>
+              <span>Jeu</span>
+            </Link>
+
+            <Link href="/a-propos" onClick={() => setOpen(false)} className={navLinkClass("/a-propos", "bg-blue-50 text-blue-700")}>
+              <span>À propos</span>
+            </Link>
+
+            <Link href="/contact" onClick={() => setOpen(false)} className={navLinkClass("/contact", "bg-blue-50 text-blue-700")}>
+              <span>Contact</span>
             </Link>
           </nav>
         </div>
