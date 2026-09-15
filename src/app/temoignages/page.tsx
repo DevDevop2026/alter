@@ -10,7 +10,7 @@ export default function TemoignagesPage() {
     { name: 'João Silva', country: 'Brésil', avatar: 'https://i.pravatar.cc/300?img=12', message: 'J’ai gagné une voiture neuve, la qualité du service est top.' },
     { name: 'Ana Pereira', country: 'Brésil', avatar: 'https://i.pravatar.cc/300?img=13', message: 'Merci ! On m’a offert une moto, je suis très reconnaissante.' },
     { name: 'Carlos Ruiz', country: 'Espagne', avatar: 'https://i.pravatar.cc/300?img=14', message: 'Une expérience formidable, j’ai obtenu un gros cadeau.' },
-    { name: 'Fernanda Costa', country: 'Brésil', avatar: 'https://i.pravatar.cc/300?img=15', message: 'Service rapide et cordial, je recommande vivement.' },
+    { name: 'Fernanda Costa', country: 'Brésil', avatar: 'https://i.pravatar.cc/300?img=15', message: 'Je pensais que c’était une blague mais j’ai été surprise d’avoir remporté des bijoux, je recommande vivement.' },
     { name: 'Sofia Martinez', country: 'Espagne', avatar: 'https://i.pravatar.cc/300?img=16', message: 'J’ai reçu un superbe prix, je suis ravie !' },
     { name: 'Pedro Lopes', country: 'Brésil', avatar: 'https://i.pravatar.cc/300?img=17', message: 'Simple et efficace, j’ai gagné quelque chose d’incroyable.' },
     { name: 'Isabela Nunes', country: 'Brésil', avatar: 'https://i.pravatar.cc/300?img=18', message: 'Très sérieux et professionnel, merci beaucoup.' },
