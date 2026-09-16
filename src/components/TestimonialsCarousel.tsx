@@ -1,63 +1,151 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, Quote, Trophy } from "lucide-react";
+import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
 
 export interface Testimonial {
   name: string;
   country: string;
   avatar: string;
   message: string;
+  /** Photo du gagnant (facultative) affichée à côté du témoignage. */
+  photo?: string;
+  /** Récompense remportée (facultative). */
+  prize?: string;
 }
 
-export function TestimonialsCarousel({ testimonials }: { testimonials: Testimonial[] }) {
+export function TestimonialsCarousel({
+  testimonials,
+  intervalMs = 5500,
+}: {
+  testimonials: Testimonial[];
+  intervalMs?: number;
+}) {
   const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
   const len = testimonials.length;
-  const intervalRef = useRef<number | null>(null);
 
   useEffect(() => {
-    intervalRef.current = window.setInterval(() => {
-      setIndex((i) => (i + 1) % len);
-    }, 3500);
-    return () => {
-      if (intervalRef.current) window.clearInterval(intervalRef.current);
-    };
-  }, [len]);
+    if (len <= 1 || paused || reducedMotion) return;
+    const id = window.setInterval(() => setIndex((i) => (i + 1) % len), intervalMs);
+    return () => window.clearInterval(id);
+  }, [intervalMs, len, paused, reducedMotion]);
 
-  if (!testimonials.length) return null;
+  const goTo = useCallback(
+    (next: number) => {
+      if (len === 0) return;
+      setIndex(((next % len) + len) % len);
+    },
+    [len]
+  );
+
+  if (!len) return null;
+
+  const current = testimonials[index];
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div
+      role="region"
+      aria-roledescription="carrousel"
+      aria-label="Témoignages des gagnants"
+      className="w-full max-w-4xl mx-auto"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       <div className="relative bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-extrabold">Témoignages</h2>
-          <div className="text-sm text-slate-400">{index + 1} / {len}</div>
+          <div className="text-sm text-slate-400">
+            {index + 1} / {len}
+          </div>
         </div>
 
-        <div className="h-48 sm:h-56 flex items-center">
-          {testimonials.map((t, i) => (
-            <div
-              key={t.name + i}
-              className={`w-full absolute inset-0 transition-opacity duration-700 flex items-center justify-center px-6 ${i === index ? "opacity-100 relative" : "opacity-0"}`}>
-              <div className="flex flex-col sm:flex-row items-center gap-6 max-w-3xl">
-                <img src={t.avatar} alt={t.name} className="w-20 h-20 rounded-full object-cover shadow-md" />
-                <div>
-                  <div className="font-bold text-lg">{t.name} <span className="text-sm text-slate-400">· {t.country}</span></div>
-                  <p className="mt-2 text-slate-300 text-sm sm:text-base">"{t.message}"</p>
-                </div>
+        <div key={current.name + index} className="testimonial-fade grid gap-5 sm:grid-cols-[9rem_1fr] sm:items-center">
+          {current.photo ? (
+            <div className="relative mx-auto h-36 w-36 shrink-0 overflow-hidden rounded-2xl border border-slate-800 sm:mx-0 sm:h-40 sm:w-40">
+              <Image
+                src={current.photo}
+                alt={`Photo de ${current.name}, gagnant(e) du Projet Solidarité`}
+                fill
+                sizes="(max-width: 640px) 144px, 160px"
+                className="object-cover"
+              />
+            </div>
+          ) : null}
+
+          <div className="min-w-0">
+            <div className="flex items-center gap-3">
+              <span className="relative block h-12 w-12 shrink-0 overflow-hidden rounded-full ring-2 ring-emerald-500/40">
+                <Image
+                  src={current.avatar}
+                  alt={`Portrait de ${current.name}`}
+                  fill
+                  sizes="48px"
+                  className="object-cover"
+                />
+              </span>
+              <div className="min-w-0">
+                <div className="truncate font-bold text-lg">{current.name}</div>
+                <div className="text-sm text-slate-400">{current.country}</div>
               </div>
             </div>
-          ))}
+
+            {current.prize ? (
+              <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300">
+                <Trophy className="h-3.5 w-3.5" />
+                {current.prize}
+              </span>
+            ) : null}
+
+            <p className="mt-3 flex gap-2 text-slate-300 text-sm sm:text-base">
+              <Quote className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500/70" />
+              <span>{current.message}</span>
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center justify-center gap-2 mt-6">
-          {testimonials.map((_, i) => (
+        <div className="mt-6 flex items-center justify-center gap-3">
+          {len > 1 && (
             <button
-              key={i}
-              onClick={() => setIndex(i)}
-              className={`w-2 h-2 rounded-full transition-opacity ${i === index ? "bg-emerald-400" : "bg-slate-700"}`}
-              aria-label={`Go to testimonial ${i + 1}`}
-            />
-          ))}
+              type="button"
+              onClick={() => goTo(index - 1)}
+              aria-label="Témoignage précédent"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-700 text-slate-300 transition-colors hover:border-emerald-500/60 hover:text-white"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+          )}
+
+          <div className="flex items-center gap-2">
+            {testimonials.map((t, i) => (
+              <button
+                key={t.name + i}
+                type="button"
+                onClick={() => setIndex(i)}
+                aria-label={`Afficher le témoignage ${i + 1}`}
+                aria-current={i === index}
+                className={`h-2 rounded-full transition-all ${
+                  i === index ? "w-6 bg-emerald-400" : "w-2 bg-slate-700 hover:bg-slate-600"
+                }`}
+              />
+            ))}
+          </div>
+
+          {len > 1 && (
+            <button
+              type="button"
+              onClick={() => goTo(index + 1)}
+              aria-label="Témoignage suivant"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-700 text-slate-300 transition-colors hover:border-emerald-500/60 hover:text-white"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          )}
         </div>
       </div>
     </div>
@@ -65,46 +153,46 @@ export function TestimonialsCarousel({ testimonials }: { testimonials: Testimoni
 }
 
 export function MiniTestimonials({ testimonials }: { testimonials: Testimonial[] }) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const reducedMotion = usePrefersReducedMotion();
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el || testimonials.length === 0) return;
-
-    let pos = 0;
-    const step = 1;
-    const totalScroll = Math.max(1, el.scrollWidth - el.clientWidth);
-
-    const id = window.setInterval(() => {
-      pos += step;
-      if (pos >= totalScroll) {
-        pos = 0;
-      }
-      el.scrollTo({ left: pos, behavior: "auto" });
-    }, 60);
-
-    return () => window.clearInterval(id);
-  }, [testimonials.length]);
+  if (testimonials.length === 0) return null;
 
   return (
     <div className="w-full max-w-5xl mx-auto">
       <div className="rounded-2xl border border-emerald-100 bg-[#f8fcfa] p-4 shadow-sm">
-        <div ref={containerRef} className="flex gap-4 overflow-x-hidden py-2">
-          {[...testimonials, ...testimonials].map((t, i) => (
-            <div
-              key={`${t.name}-${i}`}
-              className="min-w-60 shrink-0 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm"
-            >
-              <div className="flex items-center gap-3">
-                <img src={t.avatar} alt={t.name} className="h-12 w-12 rounded-full object-cover" />
-                <div>
-                  <div className="text-sm font-semibold text-slate-900">{t.name}</div>
-                  <div className="text-xs text-slate-500">{t.country}</div>
+        <div className={`py-2 ${reducedMotion ? "overflow-x-auto" : "overflow-hidden"}`}>
+          <div className={`flex gap-4 ${reducedMotion ? "" : "testimonial-marquee w-max"}`}>
+            {[...testimonials, ...testimonials].map((t, i) => (
+              <div
+                key={`${t.name}-${i}`}
+                aria-hidden={i >= testimonials.length}
+                className="w-60 shrink-0 rounded-2xl border border-emerald-100 bg-white p-4 shadow-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="relative block h-12 w-12 shrink-0 overflow-hidden rounded-full">
+                    <Image
+                      src={t.avatar}
+                      alt={`Portrait de ${t.name}`}
+                      fill
+                      sizes="48px"
+                      className="object-cover"
+                    />
+                  </span>
+                  <div className="min-w-0">
+                    <div className="truncate text-sm font-semibold text-slate-900">{t.name}</div>
+                    <div className="text-xs text-slate-500">{t.country}</div>
+                  </div>
                 </div>
+                {t.prize ? (
+                  <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-bold text-amber-700">
+                    <Trophy className="h-3 w-3" />
+                    {t.prize}
+                  </span>
+                ) : null}
+                <p className="mt-3 text-sm leading-6 text-slate-600">“{t.message}”</p>
               </div>
-              <p className="mt-3 text-sm leading-6 text-slate-600">“{t.message}”</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </div>

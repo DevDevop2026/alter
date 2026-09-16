@@ -3,20 +3,25 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { PageShell } from "@/components/PageShell";
+import { PROFIL_IMAGES } from "@/lib/gallery";
+import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
 
-const donors = [
-  { name: "Elown Musk", src: "https://i.pravatar.cc/500?u=elon" },
-  { name: "Pépé Milionario", src: "https://i.pravatar.cc/500?u=pepe" },
-  { name: "Keanu Reeves", src: "https://i.pravatar.cc/500?u=keanu" },
-];
+/** Portraits réels de la communauté, servis depuis /public/images/profil. */
+const communityPhotos = PROFIL_IMAGES.map((image, position) => ({
+  name: `Participant n°${position + 1}`,
+  alt: image.alt,
+  src: image.src,
+}));
 
 export default function AProposPage() {
   const [index, setIndex] = useState(0);
+  const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
-    const timer = setInterval(() => setIndex((i) => (i + 1) % donors.length), 3000);
+    if (reducedMotion) return;
+    const timer = setInterval(() => setIndex((i) => (i + 1) % communityPhotos.length), 3200);
     return () => clearInterval(timer);
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <div className="min-h-screen bg-(--color-bg) text-slate-900">
@@ -28,25 +33,18 @@ export default function AProposPage() {
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div className="rounded-3xl border border-emerald-100 bg-(--color-surface-alt) p-4">
             <div className="relative h-64 overflow-hidden rounded-2xl bg-white">
-              {donors.map((donor, i) => (
-                <div
-                  key={donor.name}
-                  className={`absolute inset-0 transition-opacity duration-700 ${
-                    i === index ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  <Image
-                    src={donor.src}
-                    alt={donor.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="h-full w-full object-cover"
-                    unoptimized
-                  />
-                </div>
-              ))}
+              <Image
+                key={communityPhotos[index].src}
+                src={communityPhotos[index].src}
+                alt={communityPhotos[index].alt}
+                fill
+                sizes="(max-width: 768px) 100vw, 45vw"
+                className="testimonial-fade h-full w-full object-cover"
+              />
             </div>
-            <p className="mt-4 text-center text-sm font-semibold text-slate-700">{donors[index].name}</p>
+            <p className="mt-4 text-center text-sm font-semibold text-slate-700">
+              {communityPhotos[index].name} — visages de la communauté Projet Solidarité
+            </p>
           </div>
 
           <div className="space-y-4 text-left">

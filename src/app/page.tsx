@@ -2,10 +2,67 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import { AudioAssistant } from "@/components/AudioAssistant";
-import { Sparkles, Trophy, Gift, ArrowRight, ShieldCheck, Play } from "lucide-react";
-const MiniTestimonials = dynamic(() => import('@/components/TestimonialsCarousel').then(m => m.MiniTestimonials), { ssr: false });
 import Link from "next/link";
+import { AudioAssistant } from "@/components/AudioAssistant";
+import { HeroCarousel } from "@/components/HeroCarousel";
+import {
+  HERO_SLIDES,
+  PROFIL_IMAGES,
+  RECOMPENSE_IMAGES,
+  TEMOIGNAGE_IMAGES,
+} from "@/lib/gallery";
+import { Sparkles, Trophy, Gift, ArrowRight, ShieldCheck, Play } from "lucide-react";
+
+const MiniTestimonials = dynamic(
+  () => import("@/components/TestimonialsCarousel").then((m) => m.MiniTestimonials),
+  { ssr: false }
+);
+const RewardsGallery = dynamic(
+  () => import("@/components/RewardsGallery").then((m) => m.RewardsGallery),
+  { ssr: false }
+);
+
+/** Témoignages de l'accueil : portraits et photos issus du dossier /public/images. */
+const HOME_TESTIMONIALS = [
+  {
+    name: "María García",
+    country: "Espagne",
+    prize: "30 000 $ reçus",
+    avatar: PROFIL_IMAGES[0].src,
+    photo: TEMOIGNAGE_IMAGES[0].src,
+    message: "J’ai reçu 30 000 dollars, je n’en reviens toujours pas !",
+  },
+  {
+    name: "João Silva",
+    country: "Brésil",
+    prize: "Voiture neuve",
+    avatar: PROFIL_IMAGES[1].src,
+    photo: TEMOIGNAGE_IMAGES[1].src,
+    message: "J’ai gagné une voiture neuve, merci beaucoup !",
+  },
+  {
+    name: "Lucía Fernández",
+    country: "Espagne",
+    prize: "Moto offerte",
+    avatar: PROFIL_IMAGES[2].src,
+    photo: TEMOIGNAGE_IMAGES[2].src,
+    message: "Service rapide et fiable, on m’a offert une moto.",
+  },
+];
+
+function RewardBadge({ icon: Icon, label, value }: { icon: typeof Trophy; label: string; value: string }) {
+  return (
+    <div className="flex items-center gap-3 rounded-2xl border border-emerald-100 bg-white/85 p-4 shadow-sm">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+        <Icon className="h-5 w-5" />
+      </span>
+      <div className="min-w-0">
+        <div className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">{label}</div>
+        <div className="truncate text-base font-black text-slate-900">{value}</div>
+      </div>
+    </div>
+  );
+}
 
 export default function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -66,19 +123,26 @@ export default function HomePage() {
 
             <div className="relative bg-linear-to-br from-emerald-50 via-white to-blue-50 p-6 sm:p-8 lg:p-10">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(16,185,129,0.16),transparent_45%)]" />
-              <div className="relative rounded-[28px] border border-white/80 bg-white/80 p-6 shadow-inner shadow-emerald-100/70 backdrop-blur">
-                <svg viewBox="0 0 420 320" className="h-full w-full" role="img" aria-label="Illustration de solidarité">
-                  <rect x="54" y="72" width="312" height="176" rx="28" fill="#f7fbf8" />
-                  <circle cx="144" cy="133" r="40" fill="#dff7ea" />
-                  <circle cx="276" cy="133" r="40" fill="#dceeff" />
-                  <path d="M112 129c0-20 16-36 36-36 13 0 24 7 31 18" stroke="#0f766e" strokeWidth="12" strokeLinecap="round" />
-                  <path d="M244 129c0-20-16-36-36-36-13 0-24 7-31 18" stroke="#2563eb" strokeWidth="12" strokeLinecap="round" />
-                  <path d="M146 178c10 16 28 26 48 26 20 0 38-10 48-26" stroke="#0f766e" strokeWidth="12" strokeLinecap="round" />
-                  <path d="M132 208c22 10 54 16 84 16 30 0 62-6 84-16" stroke="#2563eb" strokeWidth="12" strokeLinecap="round" />
-                  <path d="M160 116c10-14 26-22 44-22 20 0 38 9 50 24" stroke="#10b981" strokeWidth="10" strokeLinecap="round" />
-                  <path d="M154 100c10-15 27-24 46-24 18 0 35 8 46 22" stroke="#3b82f6" strokeWidth="10" strokeLinecap="round" />
-                  <path d="M178 218l18 20 38-44" stroke="#f59e0b" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+              <div className="relative rounded-[28px] border border-white/80 bg-white/80 p-5 shadow-inner shadow-emerald-100/70 backdrop-blur sm:p-6">
+                <HeroCarousel slides={HERO_SLIDES} />
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                  <RewardBadge
+                    icon={Trophy}
+                    label="Récompenses"
+                    value={`${RECOMPENSE_IMAGES.length} remises`}
+                  />
+                  <RewardBadge
+                    icon={Gift}
+                    label="Gagnants"
+                    value={`${TEMOIGNAGE_IMAGES.length} photos`}
+                  />
+                  <RewardBadge
+                    icon={Sparkles}
+                    label="Participants"
+                    value={`${PROFIL_IMAGES.length} profils`}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -112,6 +176,31 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* RÉCOMPENSES DÉJÀ REMISES — preuve visuelle */}
+        <section className="rounded-3xl border border-emerald-500/25 bg-emerald-950/40 p-6 shadow-[0_20px_60px_-30px_rgba(16,185,129,0.45)] sm:p-8">
+          <div className="mb-5 flex flex-col gap-2">
+            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.22em] text-amber-300">
+              <Trophy className="h-4 w-4" /> Récompenses déjà remises
+            </span>
+            <h2 className="text-2xl font-black text-white sm:text-3xl">Ils ont reçu leur don</h2>
+            <p className="max-w-3xl text-sm text-emerald-100/80 sm:text-base">
+              Découvrez quelques récompenses réellement remises à nos gagnants. Chaque code tiré est une promesse tenue.
+            </p>
+          </div>
+
+          <RewardsGallery items={RECOMPENSE_IMAGES} initialCount={8} tone="dark" />
+
+          <div className="mt-6">
+            <Link
+              href="/temoignages"
+              className="inline-flex items-center gap-2 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 px-5 py-3 text-sm font-bold text-emerald-200 transition-colors hover:border-emerald-400 hover:text-white"
+            >
+              <span>Voir tous les témoignages et photos</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
+
         {/* MANUAL TRIGGER BUTTON IN CASE USER WANTS TO RE-OPEN THE MODAL */}
         {wonPrizeName && (
           <div className="p-5 rounded-3xl bg-emerald-950/60 border-2 border-emerald-500 text-center space-y-3 shadow-xl">
@@ -130,16 +219,10 @@ export default function HomePage() {
 
         {/* MINI TESTIMONIALS SLIDER (extrait en bas de la page d'accueil) */}
         <div className="pt-8">
-          {/* lazy load testimonials data inline to avoid extra imports */}
           <div className="max-w-5xl mx-auto px-4">
-            {/* Import the component client-side (dynamic with ssr:false) */}
-            {/* Rendu direct — le composant est chargé client-side via dynamic({ ssr:false }) */}
-            <MiniTestimonials testimonials={[
-              { name: 'María García', country: 'Espagne', avatar: 'https://i.pravatar.cc/150?img=11', message: 'J\u2019ai reçu 30\u2009000 dollars, je n’en reviens toujours pas !' },
-              { name: 'João Silva', country: 'Brésil', avatar: 'https://i.pravatar.cc/150?img=12', message: 'J\u2019ai gagné une voiture neuve, merci beaucoup !' },
-              { name: 'Lucía Fernández', country: 'Espagne', avatar: 'https://i.pravatar.cc/150?img=13', message: 'Service rapide et fiable, on m\u2019a offert une moto.' },
-            ]} />
-            </div>
+            {/* Composant chargé côté client uniquement (dynamic + ssr:false) */}
+            <MiniTestimonials testimonials={HOME_TESTIMONIALS} />
+          </div>
         </div>
       </main>
 

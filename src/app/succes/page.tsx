@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import confetti from "canvas-confetti";
+import dynamic from "next/dynamic";
 import {
   CheckCircle2,
   Copy,
@@ -16,9 +16,16 @@ import {
   ShieldCheck,
   Share2,
   Gift,
+  Trophy,
 } from "lucide-react";
 import Link from "next/link";
 import { AudioAssistant } from "@/components/AudioAssistant";
+import { RECOMPENSE_SPOTLIGHT } from "@/lib/gallery";
+
+const RewardsGallery = dynamic(
+  () => import("@/components/RewardsGallery").then((m) => m.RewardsGallery),
+  { ssr: false }
+);
 
 interface DonData {
   id: string;
@@ -93,20 +100,26 @@ function SuccessContent() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Trigger Confetti Celebration
+  // Trigger Confetti Celebration — canvas-confetti est chargé à la demande
   useEffect(() => {
-    if (don && !error) {
-      try {
+    if (!don || error) return;
+
+    let cancelled = false;
+    void import("canvas-confetti")
+      .then(({ default: confetti }) => {
+        if (cancelled) return;
         confetti({
           particleCount: 120,
           spread: 80,
           origin: { y: 0.5 },
           colors: ["#10B981", "#3B82F6", "#F59E0B", "#EC4899", "#8B5CF6"],
         });
-      } catch (e) {
-        console.warn("Confetti error", e);
-      }
-    }
+      })
+      .catch((err) => console.warn("Confetti error", err));
+
+    return () => {
+      cancelled = true;
+    };
   }, [don, error]);
 
   // Redirection Countdown Timer
@@ -334,6 +347,18 @@ function SuccessContent() {
           </div>
         )}
       </div>
+
+      {/* RÉCOMPENSES DÉJÀ REMISES — preuve visuelle avant la redirection */}
+      <section className="mb-8 rounded-3xl border border-emerald-500/25 bg-emerald-950/40 p-5 sm:p-6">
+        <h3 className="mb-1 flex items-center gap-2 text-sm font-black uppercase tracking-wider text-amber-300">
+          <Trophy className="w-4 h-4" />
+          Récompenses déjà remises à d’autres gagnants
+        </h3>
+        <p className="mb-4 text-xs text-slate-300">
+          Votre don fait partie du même programme : chaque code validé par l’administrateur donne lieu à une remise réelle.
+        </p>
+        <RewardsGallery items={RECOMPENSE_SPOTLIGHT} initialCount={4} tone="dark" />
+      </section>
 
       <div className="text-center pb-8">
         <Link
