@@ -70,7 +70,7 @@ export function TestimonialsCarousel({
             <div className="relative mx-auto h-36 w-36 shrink-0 overflow-hidden rounded-2xl border border-slate-800 sm:mx-0 sm:h-40 sm:w-40">
               <Image
                 src={current.photo}
-                alt={`Photo de ${current.name}, gagnant(e) du Projet Solidarité`}
+                alt={`Photo de ${current.name}, participant(e) à l'initiative solidaire Projet Solidarité`}
                 fill
                 sizes="(max-width: 640px) 144px, 160px"
                 className="object-cover"

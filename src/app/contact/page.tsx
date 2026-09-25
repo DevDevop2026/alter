@@ -11,7 +11,16 @@ export default function ContactPage() {
   const waLink = `https://wa.me/${cleaned}`;
 
   return (
-    <div className="min-h-screen bg-(--color-bg) text-slate-900">
+    <div
+      className="contact-page min-h-screen bg-(--color-bg) text-slate-900"
+      style={{
+        backgroundImage:
+          "linear-gradient(rgba(247,251,248,0.38), rgba(247,251,248,0.38)), url('/images/temoignages/1787386135816.jpg')",
+        backgroundAttachment: "fixed",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+      }}
+    >
       <PageShell
         title="Contact"
         eyebrow="WhatsApp • email"

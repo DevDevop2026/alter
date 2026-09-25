@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { HeroCarousel } from "@/components/HeroCarousel";
 import { PageShell } from "@/components/PageShell";
+import { HERO_SLIDES } from "@/lib/gallery";
 
 const DEFAULT_ADMIN_WHATSAPP = "2250700000000";
 
@@ -45,19 +47,32 @@ export default function JeuPage() {
     <div className="min-h-screen bg-(--color-bg) text-slate-900">
       <PageShell
         title="Jeu"
-        description="Commencez facilement, remplissez vos informations et obtenez votre code unique en quelques secondes."
+        description="Participez au jeu solidaire Projet Solidarité, renseignez vos informations et obtenez votre code unique pour suivre la validation de votre don."
       >
-        {!started ? (
-          <div className="flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-emerald-200 bg-(--color-surface-alt) p-8 text-center">
-            <h2 className="text-2xl font-semibold text-slate-900">Comment participer au jeu</h2>
+        <div
+          className="relative overflow-hidden rounded-3xl border border-emerald-200/70 bg-emerald-50/70 p-4 shadow-sm sm:p-6"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(240,253,250,0.38), rgba(239,246,255,0.38)), url('/images/recompense/1787389819218.jpg')",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+          }}
+        >
+          <div className="relative mx-auto mb-8 max-w-2xl rounded-3xl border border-emerald-100 bg-white/75 p-4 shadow-sm sm:p-6">
+            <HeroCarousel slides={HERO_SLIDES} />
+          </div>
+
+          {!started ? (
+          <div className="relative flex flex-col items-center justify-center gap-4 rounded-3xl border border-dashed border-emerald-200 bg-white/55 p-8 text-center">
+            <h2 className="text-2xl font-semibold text-slate-900">Comment participer au jeu solidaire</h2>
             <div className="max-w-2xl text-left text-sm text-slate-600">
-              <p className="mb-3 font-medium text-slate-700">Pour jouer au <strong>Projet Solidarité</strong> :</p>
+              <p className="mb-3 font-medium text-slate-700">Pour participer à <strong>Projet Solidarité</strong>, l’initiative solidaire d’Almira Aldahab Foundation :</p>
               <ol className="list-decimal space-y-2 pl-5">
                 <li>Cliquez sur le bouton <strong>“Entrer dans le jeu”</strong>.</li>
                 <li>Remplissez correctement le formulaire avec vos informations (<strong>Nom, Prénom, Pays, Numéro WhatsApp</strong>).</li>
-                <li>Une fois validé, le système génère automatiquement un <strong>code unique de 8 caractères alphanumériques</strong>.</li>
-                <li>Envoyez ce code aux organisateurs via WhatsApp.</li>
-                <li>Les organisateurs vérifient votre code et vous annoncent le <strong>lot gagné</strong>, qui vous sera ensuite remis.</li>
+                <li>Après validation, le système génère automatiquement un <strong>code unique de 8 caractères alphanumériques</strong>.</li>
+                <li>Envoyez ce code aux organisateurs via WhatsApp pour confirmer votre participation.</li>
+                <li>L’équipe vérifie votre code et vous informe de la suite du processus lié à votre don ou à votre récompense.</li>
               </ol>
             </div>
             <button
@@ -67,8 +82,8 @@ export default function JeuPage() {
               Entrer dans le jeu
             </button>
           </div>
-        ) : (
-          <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+          ) : (
+          <div className="relative rounded-3xl border border-slate-200 bg-white/85 p-5 shadow-sm">
             {!code ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-2">
@@ -106,9 +121,9 @@ export default function JeuPage() {
 
                 <div className="space-y-2">
                   <a href={buildWhatsAppUrl()} target="_blank" rel="noreferrer" className="btn-primary">
-                    Valider votre jeu
+                    Valider ma participation
                   </a>
-                  <p className="text-sm text-slate-600">Vous serez redirigé vers WhatsApp pour transmettre vos informations au donateur.</p>
+                  <p className="text-sm text-slate-600">Vous serez redirigé vers WhatsApp pour transmettre votre code et confirmer votre participation auprès de l’équipe.</p>
                 </div>
 
                 <div className="pt-2">
@@ -119,7 +134,8 @@ export default function JeuPage() {
               </div>
             )}
           </div>
-        )}
+          )}
+        </div>
       </PageShell>
     </div>
   );

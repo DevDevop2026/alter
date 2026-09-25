@@ -86,8 +86,18 @@ const RECOMPENSE_FILES = [
   "IMG-20260902-WA0021.jpg",
 ] as const;
 
+const PARTENAIRE_FILES = [
+  "IMG-20260720-WA0017.jpg",
+  "IMG-20260720-WA0018.jpg",
+  "IMG-20260720-WA0019.jpg",
+  "IMG-20260720-WA0021.jpg",
+  "IMG-20260720-WA0022.jpg",
+  "IMG-20260720-WA0023.jpg",
+  "IMG-20260720-WA0024.jpg",
+] as const;
+
 function buildItems(
-  folder: "profil" | "temoignages" | "recompense",
+  folder: "profil" | "temoignages" | "recompense" | "Paertenaire",
   files: readonly string[],
   altPrefix: string,
   captionPrefix?: string
@@ -103,7 +113,7 @@ function buildItems(
 export const PROFIL_IMAGES: MediaItem[] = buildItems(
   "profil",
   PROFIL_FILES,
-  "Portrait d'un participant du Projet Solidarité",
+  "Portrait d'un participant à l'initiative solidaire Projet Solidarité",
   "Participant"
 );
 
@@ -111,7 +121,7 @@ export const PROFIL_IMAGES: MediaItem[] = buildItems(
 export const TEMOIGNAGE_IMAGES: MediaItem[] = buildItems(
   "temoignages",
   TEMOIGNAGE_FILES,
-  "Photo d'un gagnant du Projet Solidarité",
+  "Photo d'un participant de l'initiative solidaire Projet Solidarité",
   "Gagnant"
 );
 
@@ -119,8 +129,15 @@ export const TEMOIGNAGE_IMAGES: MediaItem[] = buildItems(
 export const RECOMPENSE_IMAGES: MediaItem[] = buildItems(
   "recompense",
   RECOMPENSE_FILES,
-  "Récompense remise à un gagnant du Projet Solidarité",
+  "Récompense remise dans le cadre de l'initiative solidaire Projet Solidarité",
   "Récompense"
+);
+
+/** Images des partenaires présentées sur la page À propos. */
+export const PARTENAIRE_IMAGES: MediaItem[] = buildItems(
+  "Paertenaire",
+  PARTENAIRE_FILES,
+  "Partenaire d'Almira Aldahab Foundation pour Projet Solidarité"
 );
 
 /**
@@ -130,42 +147,42 @@ export const RECOMPENSE_IMAGES: MediaItem[] = buildItems(
 export const HERO_SLIDES: MediaItem[] = [
   {
     src: "/images/recompense/1787388667061.jpg",
-    alt: "Remise d'une récompense à un gagnant du Projet Solidarité",
+    alt: "Remise d'une récompense dans le cadre de Projet Solidarité",
     caption: "Récompense remise à un gagnant",
   },
   {
     src: "/images/temoignages/1787385369927.jpg",
-    alt: "Gagnant du Projet Solidarité recevant son don",
+    alt: "Participant de Projet Solidarité recevant un don",
     caption: "Un gagnant reçoit son don",
   },
   {
     src: "/images/recompense/1787386408536.jpg",
-    alt: "Don spécial remis par l'équipe Projet Solidarité",
+    alt: "Don remis par l'équipe de l'initiative solidaire Projet Solidarité",
     caption: "Don spécial remis",
   },
   {
     src: "/images/temoignages/1787386079806.jpg",
-    alt: "Participant du Projet Solidarité après sa victoire",
+    alt: "Participant de Projet Solidarité après sa participation",
     caption: "Victoire partagée",
   },
   {
     src: "/images/recompense/1787389814989.jpg",
-    alt: "Récompense officielle du Projet Solidarité",
+    alt: "Récompense de l'initiative solidaire Projet Solidarité",
     caption: "Récompense officielle",
   },
   {
     src: "/images/temoignages/IMG-20240217-WA0002-2.jpg",
-    alt: "Photo souvenir d'un gagnant du Projet Solidarité",
+    alt: "Photo souvenir d'un participant de Projet Solidarité",
     caption: "Photo souvenir d'un gagnant",
   },
   {
     src: "/images/recompense/1787389824779.jpg",
-    alt: "Remise de prix du Projet Solidarité",
+    alt: "Remise de récompense de l'initiative solidaire Projet Solidarité",
     caption: "Remise de prix",
   },
   {
     src: "/images/temoignages/1787388596201.jpg",
-    alt: "Gagnante du Projet Solidarité présentant sa récompense",
+    alt: "Participante de Projet Solidarité présentant sa récompense",
     caption: "Gagnante et sa récompense",
   },
 ];

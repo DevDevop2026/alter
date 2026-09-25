@@ -5,34 +5,44 @@ import "./globals.css";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 const description =
-  "Plateforme de gestion de dons spéciaux avec génération algorithmique de code unique, notification administrateur et redirection WhatsApp.";
+  "Projet Solidarité est une initiative solidaire d’Almira Aldahab Foundation, dirigée par Amira, sa PDG, avec un jeu solidaire, des dons et une participation transparente.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Dons Spéciaux — Code Unique & Redirection WhatsApp",
-    template: "%s — Projet Solidarité",
+    default: "Projet Solidarité — Almira Aldahab Foundation",
+    template: "%s — Almira Aldahab Foundation",
   },
   description,
-  keywords: ["dons spéciaux", "Projet Solidarité", "code unique", "WhatsApp", "jeu solidaire"],
-  applicationName: "Projet Solidarité",
+  keywords: [
+    "Projet Solidarité",
+    "Almira Aldahab Foundation",
+    "Amira PDG",
+    "initiative solidaire",
+    "jeu solidaire",
+    "dons",
+    "participation transparente",
+    "code unique",
+    "WhatsApp",
+  ],
+  applicationName: "Almira Aldahab Foundation",
   openGraph: {
     type: "website",
     locale: "fr_FR",
     url: "/",
-    siteName: "Projet Solidarité",
-    title: "Dons Spéciaux — Projet Solidarité",
+    siteName: "Almira Aldahab Foundation",
+    title: "Projet Solidarité — Almira Aldahab Foundation",
     description,
     images: [
       {
         url: "/images/recompense/1787388667061.jpg",
-        alt: "Remise d'une récompense à un gagnant du Projet Solidarité",
+        alt: "Remise d'une récompense dans le cadre de Projet Solidarité",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Dons Spéciaux — Projet Solidarité",
+    title: "Projet Solidarité — Almira Aldahab Foundation",
     description,
     images: ["/images/recompense/1787388667061.jpg"],
   },
@@ -49,7 +59,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="fr">
       <body className="antialiased selection:bg-emerald-500 selection:text-slate-950">
-        <div className="min-h-screen bg-[var(--color-bg)] text-slate-900">
+        <div className="min-h-screen bg-(--color-bg) text-slate-900">
           <Navbar />
           {children}
         </div>

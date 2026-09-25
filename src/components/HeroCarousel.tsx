@@ -13,10 +13,16 @@ type HeroCarouselProps = {
   /** Active le préchargement de la première image (LCP). */
   priority?: boolean;
   className?: string;
+  ariaLabel?: string;
+  badgeLabel?: string;
+  imageFit?: "cover" | "contain";
+  size?: "default" | "tall";
+  imagePosition?: "center" | "bottom";
+  subtleBorder?: boolean;
 };
 
 /**
- * Carrousel d'en-tête : met en avant les récompenses remises et les gagnants.
+ * Carrousel d'images : met en avant les participants, partenaires et récompenses.
  * - Accessible (région, boutons labellisés, `aria-hidden` sur les diapos inactives)
  * - Autoplay suspendu au survol / focus, désactivé si « mouvement réduit »
  * - Optimisé : seule la 1re image est prioritaire, les autres sont en lazy loading
@@ -26,6 +32,12 @@ export function HeroCarousel({
   intervalMs = 5000,
   priority = true,
   className = "",
+  ariaLabel = "Images de l'initiative solidaire Projet Solidarité",
+  badgeLabel = "Preuves en images",
+  imageFit = "cover",
+  size = "default",
+  imagePosition = "center",
+  subtleBorder = false,
 }: HeroCarouselProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -54,14 +66,20 @@ export function HeroCarousel({
     <div
       role="region"
       aria-roledescription="carrousel"
-      aria-label="Récompenses et gagnants du Projet Solidarité"
+      aria-label={ariaLabel}
       className={`relative ${className}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
     >
-      <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl border border-white/70 bg-slate-100 shadow-[0_18px_45px_-20px_rgba(15,23,42,0.35)] sm:aspect-16/11">
+      <div
+        className={`relative w-full overflow-hidden rounded-3xl border ${
+          subtleBorder ? "border-white/30" : "border-white/70"
+        } bg-slate-100 shadow-[0_18px_45px_-20px_rgba(15,23,42,0.35)] ${
+          size === "tall" ? "aspect-4/5" : "aspect-4/5 sm:aspect-16/11"
+        }`}
+      >
         {slides.map((slide, i) => (
           <div
             key={slide.src}
@@ -76,7 +94,9 @@ export function HeroCarousel({
               fill
               sizes="(max-width: 640px) 92vw, (max-width: 1024px) 88vw, 460px"
               priority={priority && i === 0}
-              className="object-cover"
+              className={`${imageFit === "contain" ? "object-contain" : "object-cover"} ${
+                imagePosition === "bottom" ? "object-bottom" : "object-center"
+              }`}
             />
           </div>
         ))}
@@ -85,7 +105,7 @@ export function HeroCarousel({
 
         <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-700 shadow-sm backdrop-blur">
           <Sparkles className="h-3.5 w-3.5" />
-          Preuves en images
+          {badgeLabel}
         </span>
 
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">

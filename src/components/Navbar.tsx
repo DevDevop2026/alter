@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Gift, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -21,12 +21,9 @@ export function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 text-emerald-600 transition-transform group-hover:scale-105">
-              <Gift className="h-5 w-5" />
-            </div>
             <div>
-              <span className="block text-lg font-bold tracking-tight text-slate-900">Dons Spéciaux</span>
-              <span className="block text-xs font-medium text-slate-500">Code unique • WhatsApp</span>
+              <span className="block text-lg font-bold tracking-tight text-slate-900">Almira Aldahab Foundation</span>
+              <span className="block text-xs font-medium text-slate-500">Une communauté engagée</span>
             </div>
           </Link>
 
@@ -56,6 +53,10 @@ export function Navbar() {
             <Link href="/contact" className={navLinkClass("/contact", "bg-blue-50 text-blue-700")}>
               <span>Contact</span>
             </Link>
+
+            <Link href="/politique-confidentialite" className={navLinkClass("/politique-confidentialite", "bg-slate-100 text-slate-700")}>
+              <span>Confidentialité</span>
+            </Link>
           </nav>
         </div>
 
@@ -75,6 +76,10 @@ export function Navbar() {
 
             <Link href="/contact" onClick={() => setOpen(false)} className={navLinkClass("/contact", "bg-blue-50 text-blue-700")}>
               <span>Contact</span>
+            </Link>
+
+            <Link href="/politique-confidentialite" onClick={() => setOpen(false)} className={navLinkClass("/politique-confidentialite", "bg-slate-100 text-slate-700")}>
+              <span>Confidentialité</span>
             </Link>
           </nav>
         </div>

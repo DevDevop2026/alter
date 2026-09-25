@@ -89,8 +89,7 @@ export default function TemoignagesPage() {
         <header className="text-center">
           <h1 className="text-3xl font-extrabold mb-3">Témoignages</h1>
           <p className="mx-auto max-w-2xl text-sm text-slate-400">
-            Ils ont participé au jeu Projet Solidarité et ont reçu leur don. Retrouvez leurs messages,
-            leurs photos et les récompenses réellement remises.
+            Découvrez les témoignages de participants au jeu solidaire Projet Solidarité, une initiative d’Almira Aldahab Foundation. Retrouvez leurs messages, leurs photos et les récompenses remises dans le cadre du programme.
           </p>
         </header>
 
