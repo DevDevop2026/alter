@@ -88,40 +88,40 @@ export default function HomePage() {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-emerald-500 selection:text-slate-950">
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8">
         <section
-          className="relative overflow-hidden rounded-4xl border border-emerald-100 bg-[#f8fcfa] shadow-[0_20px_60px_-24px_rgba(15,23,42,0.18)]"
+          className="relative overflow-hidden rounded-4xl border border-slate-800 bg-slate-950 shadow-[0_20px_60px_-24px_rgba(0,0,0,0.7)]"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(248,252,250,0.42), rgba(248,252,250,0.42)), url('/images/profil/1787386135816.jpg')",
+              "linear-gradient(to right, rgba(2, 6, 23, 0.94) 0%, rgba(2, 6, 23, 0.88) 50%, rgba(2, 6, 23, 0.75) 100%), url('/images/profil/1787386135816.jpg')",
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
         >
           <div className="relative grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <div className="p-8 sm:p-10 lg:p-12">
-              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">
+              <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-400 backdrop-blur-md">
                 <Sparkles className="h-4 w-4" /> Initiative solidaire
               </span>
 
-              <h1 className="mt-5 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl">
+              <h1 className="mt-5 text-4xl font-black tracking-tight text-white drop-shadow-sm sm:text-5xl">
                 Almira Aldahab Foundation
               </h1>
 
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-200 sm:text-lg">
                 Projet Solidarité est l’initiative solidaire d’Almira Aldahab Foundation, dirigée par Amira, sa PDG. Elle associe entraide, participation et divertissement pour proposer une expérience de dons claire, accessible et fondée sur la transparence, avec le soutien de partenaires comme Pépé Milionario, Keanu Reeves et Elon Musk.
               </p>
 
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
                 Notre objectif est de rendre la solidarité plus simple et plus proche de chacun. Grâce à un jeu solidaire et à un parcours de participation guidé, chaque participant peut comprendre les étapes, générer son code unique et suivre la procédure de validation de son don.
               </p>
 
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
+              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
                 Projet Solidarité est plus qu’un jeu : c’est une communauté engagée autour du partage, de la générosité et de la confiance. Chaque participation s’inscrit dans la vision d’Almira Aldahab Foundation : créer une initiative solidaire utile, compréhensible et accessible.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
                   href="/jeu"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-600/20 transition-transform hover:-translate-y-0.5 hover:bg-emerald-500"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-emerald-500/25 transition-transform hover:-translate-y-0.5 hover:bg-emerald-400 font-bold"
                 >
                   <Gift className="h-4 w-4" />
                   <span>Faire un don</span>
@@ -129,7 +129,7 @@ export default function HomePage() {
 
                 <Link
                   href="/a-propos"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-700 transition-colors hover:border-emerald-200 hover:text-emerald-700"
+                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/80 backdrop-blur-md px-6 py-3 text-sm font-semibold text-slate-200 transition-colors hover:border-emerald-500/50 hover:text-white"
                 >
                   <ShieldCheck className="h-4 w-4" />
                   <span>En savoir plus</span>
@@ -138,7 +138,7 @@ export default function HomePage() {
             </div>
 
             <div className="px-6 pb-8 sm:px-8 sm:pb-10 lg:px-10 lg:py-10">
-              <div className="rounded-3xl border border-white/70 bg-white/65 p-4 shadow-sm backdrop-blur-sm sm:p-5">
+              <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-4 shadow-2xl backdrop-blur-md sm:p-5">
                 <HeroCarousel
                   slides={INITIATIVE_SLIDES}
                   ariaLabel="Images de l'initiative solidaire"
