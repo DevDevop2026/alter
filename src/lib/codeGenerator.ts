@@ -197,23 +197,19 @@ export function buildWhatsAppRedirect(
     email?: string | null;
   }
 ) {
-  const rawPhone = config.ADMIN_WHATSAPP_NUMBER || "2250700000000";
+  const rawPhone = config.ADMIN_WHATSAPP_NUMBER || "351925396119";
   const cleanPhone = rawPhone.replace(/\D/g, "");
 
   const template =
     config.WHATSAPP_MESSAGE_TEMPLATE ||
-    "Bonjour {ADMIN_NAME}, je souhaite réclamer / obtenir mon don spécial.\nCode: {CODE}\nNom: {NOM} {PRENOM}\nTéléphone: {TELEPHONE}\nEmail: {EMAIL}";
-
-  const emailText = don.email ? don.email : "Non fourni";
+    "Bonjour {ADMIN_NAME}, je souhaite réclamer / obtenir mon don spécial.\nCode: {CODE}\nNom: {NOM} {PRENOM}\nTéléphone: {TELEPHONE}";
 
   const message = template
     .replace(/\{ADMIN_NAME\}/g, config.ADMIN_NAME || "")
     .replace(/\{CODE\}/g, don.code)
     .replace(/\{NOM\}/g, don.nom)
     .replace(/\{PRENOM\}/g, don.prenom)
-    .replace(/\{TELEPHONE\}/g, don.telephone)
-    .replace(/\{EMAIL\}/g, emailText)
-    .replace(/\{EMAIL_IF_ANY\}/g, don.email ? `Email: ${don.email}` : "");
+    .replace(/\{TELEPHONE\}/g, don.telephone);
 
   const encodedMessage = encodeURIComponent(message);
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;

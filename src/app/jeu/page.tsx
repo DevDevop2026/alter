@@ -6,7 +6,7 @@ import { HeroCarousel } from "@/components/HeroCarousel";
 import { PageShell } from "@/components/PageShell";
 import { HERO_SLIDES } from "@/lib/gallery";
 
-const DEFAULT_ADMIN_WHATSAPP = "2250700000000";
+const DEFAULT_ADMIN_WHATSAPP = "351925396119";
 
 function generateCode(length = 8) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

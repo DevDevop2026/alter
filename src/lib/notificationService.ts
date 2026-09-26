@@ -14,7 +14,7 @@ export interface AdminNotificationPayload {
 }
 
 /**
- * Dispatches notification to admin channels (Simulated Webhook, Email, Audit Log)
+ * Dispatches notification to admin channels (Simulated Webhook and Audit Log)
  * and updates donation status to 'notified'.
  */
 export async function notifyAdminForDonSpecial(don: {
@@ -58,13 +58,7 @@ export async function notifyAdminForDonSpecial(don: {
     console.log("[Notification Simulation] Webhook URL not configured. Payload ready:", payload);
   }
 
-  // 2. Simulate Email Dispatch (Placeholder)
-  const adminEmail = process.env.ADMIN_EMAIL || "admin@organisateurs-dons.org";
-  console.log(`[Notification Simulation] Simulated Email sent to ${adminEmail}:`);
-  console.log(`Subject: Nouveau Don Spécial Enregistré - Code ${don.code}`);
-  console.log(`Message: Don de ${don.prenom} ${don.nom} (${don.telephone}). Code: ${don.code}`);
-
-  // 3. Record in DB notification_logs table
+  // 2. Record in DB notification_logs table
   await db.insert(notificationLogs).values({
     donSpecialId: don.id,
     type: "NEW_DON_SPECIAL",
@@ -74,7 +68,7 @@ export async function notifyAdminForDonSpecial(don: {
     createdAt: now,
   });
 
-  // 4. Update don_specials table record: status = 'notified', notified_at = now
+  // 3. Update don_specials table record: status = 'notified', notified_at = now
   await db
     .update(donSpecials)
     .set({

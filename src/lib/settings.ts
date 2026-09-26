@@ -12,11 +12,11 @@ export interface SystemConfig {
 }
 
 export const DEFAULT_CONFIG: SystemConfig = {
-  ADMIN_WHATSAPP_NUMBER: process.env.ADMIN_WHATSAPP_NUMBER || "2250700000000",
+  ADMIN_WHATSAPP_NUMBER: process.env.ADMIN_WHATSAPP_NUMBER || "351925396119",
   ADMIN_NAME: process.env.ADMIN_NAME || "Comité de Distribution des Dons",
   WHATSAPP_MESSAGE_TEMPLATE:
     process.env.WHATSAPP_MESSAGE_TEMPLATE ||
-    "Bonjour {ADMIN_NAME}, je souhaite obtenir / réclamer mon don spécial.\nCode: {CODE}\nNom: {NOM} {PRENOM}\nTéléphone: {TELEPHONE}\nEmail: {EMAIL}",
+    "Bonjour {ADMIN_NAME}, je souhaite obtenir / réclamer mon don spécial.\nCode: {CODE}\nNom: {NOM} {PRENOM}\nTéléphone: {TELEPHONE}",
   CODE_L1_MODE: (process.env.CODE_L1_MODE as "FIXED" | "RANDOM") || "FIXED",
   CODE_L1_VALUE: process.env.CODE_L1_VALUE || "B",
   CODE_L2_MODE: (process.env.CODE_L2_MODE as "FIXED" | "RANDOM") || "FIXED",

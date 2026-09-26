@@ -33,7 +33,6 @@ interface DonData {
   nom: string;
   prenom: string;
   telephone: string;
-  email: string | null;
   status: string;
   createdAt: string;
 }
@@ -320,11 +319,6 @@ function SuccessContent() {
           <div>
             <p className="text-xs text-slate-500 font-bold">Téléphone</p>
             <p className="font-mono font-extrabold text-white text-base">{don.telephone}</p>
-          </div>
-
-          <div>
-            <p className="text-xs text-slate-500 font-bold">Email</p>
-            <p className="text-white">{don.email || "Non renseigné"}</p>
           </div>
 
           <div>
