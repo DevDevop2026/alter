@@ -204,7 +204,7 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="font-semibold text-slate-200">Almira Aldahab Foundation</p>
-            <p className="mt-1">{t("home.footerIntro")}</p>
+            <p className="mt-1">© Almira Aldahab Foundation</p>
           </div>
 
           <div className="flex flex-wrap items-center gap-4">
