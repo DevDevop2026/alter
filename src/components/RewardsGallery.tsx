@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Trophy, X } from "lucide-react";
 import type { MediaItem } from "@/lib/gallery";
+import { useTranslation } from "react-i18next";
 
 type RewardsGalleryProps = {
   items: MediaItem[];
@@ -28,6 +29,7 @@ export function RewardsGallery({
 }: RewardsGalleryProps) {
   const [expanded, setExpanded] = useState(false);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const { t } = useTranslation();
 
   const visible = expanded ? items : items.slice(0, initialCount);
   const hasMore = items.length > initialCount;
@@ -76,13 +78,13 @@ export function RewardsGallery({
             <button
               type="button"
               onClick={() => setOpenIndex(index)}
-              aria-label={`Agrandir : ${item.alt}`}
+              aria-label={t("gallery.enlarge", { alt: t("gallery.reward") })}
               className={`group relative block w-full overflow-hidden rounded-2xl border ${frameClass} shadow-sm transition-transform duration-300 hover:-translate-y-0.5`}
             >
               <span className="relative block aspect-4/5 w-full">
                 <Image
                   src={item.src}
-                  alt={item.alt}
+                  alt={t("gallery.imageAlt", { number: index + 1 })}
                   fill
                   sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -90,7 +92,7 @@ export function RewardsGallery({
                 <span className="absolute inset-0 bg-linear-to-t from-slate-950/75 via-transparent to-transparent opacity-70 transition-opacity group-hover:opacity-95" />
                 <span className="absolute inset-x-3 bottom-3 flex items-center gap-1.5 text-left text-[11px] font-semibold text-white">
                   <Trophy className="h-3.5 w-3.5 shrink-0 text-amber-300" />
-                  <span className="line-clamp-2">{item.caption ?? "Récompense remise"}</span>
+                  <span className="line-clamp-2">{t("gallery.reward")}</span>
                 </span>
               </span>
             </button>
@@ -109,7 +111,7 @@ export function RewardsGallery({
                 : "inline-flex items-center gap-2 rounded-2xl border border-emerald-200 bg-white px-5 py-3 text-sm font-bold text-emerald-700 transition-colors hover:border-emerald-400 hover:text-emerald-800"
             }
           >
-            Voir les {items.length - initialCount} autres récompenses
+            {t("gallery.more", { count: items.length - initialCount })}
           </button>
         </div>
       )}
@@ -118,7 +120,7 @@ export function RewardsGallery({
         <div
           role="dialog"
           aria-modal="true"
-          aria-label={activeItem.alt}
+          aria-label={t("gallery.imageAlt", { number: (openIndex ?? 0) + 1 })}
           className="fixed inset-0 z-60 flex flex-col items-center justify-center bg-slate-950/92 p-4 backdrop-blur-sm"
           onClick={close}
         >
@@ -126,7 +128,7 @@ export function RewardsGallery({
             <div className="relative aspect-4/5 w-full overflow-hidden rounded-3xl border border-white/10 bg-slate-900 sm:aspect-16/10">
               <Image
                 src={activeItem.src}
-                alt={activeItem.alt}
+                alt={t("gallery.imageAlt", { number: (openIndex ?? 0) + 1 })}
                 fill
                 sizes="(max-width: 1024px) 92vw, 900px"
                 className="object-contain"
@@ -134,13 +136,13 @@ export function RewardsGallery({
             </div>
 
             <p className="mt-3 text-center text-sm font-medium text-slate-300">
-              {(activeItem.caption ?? activeItem.alt) + " — " + ((openIndex ?? 0) + 1) + " / " + visible.length}
+              {t("gallery.imageLabel", { number: (openIndex ?? 0) + 1 }) + " — " + ((openIndex ?? 0) + 1) + " / " + visible.length}
             </p>
 
             <button
               type="button"
               onClick={close}
-              aria-label="Fermer la visionneuse"
+              aria-label={t("gallery.close")}
               className="absolute right-0 top-0 flex h-10 w-10 -translate-y-full items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-lg transition hover:bg-white"
             >
               <X className="h-5 w-5" />
@@ -151,7 +153,7 @@ export function RewardsGallery({
                 <button
                   type="button"
                   onClick={() => step(-1)}
-                  aria-label="Récompense précédente"
+                  aria-label={t("gallery.previous")}
                   className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-900 shadow-lg transition hover:bg-white"
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -159,7 +161,7 @@ export function RewardsGallery({
                 <button
                   type="button"
                   onClick={() => step(1)}
-                  aria-label="Récompense suivante"
+                  aria-label={t("gallery.next")}
                   className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-900 shadow-lg transition hover:bg-white"
                 >
                   <ChevronRight className="h-5 w-5" />

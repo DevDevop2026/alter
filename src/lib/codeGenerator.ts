@@ -54,7 +54,7 @@ export async function generateUniqueDonCode(
     
     if (!codeFormatRegex.test(formattedChoice)) {
       throw new Error(
-        `Le code choisi "${formattedChoice}" ne respecte pas le format requis L1-L2NNN (ex: B-O028).`
+        `El código elegido "${formattedChoice}" no cumple el formato requerido L1-L2NNN (por ejemplo: B-O028).`
       );
     }
 
@@ -66,7 +66,7 @@ export async function generateUniqueDonCode(
 
     if (existing.length > 0) {
       throw new Error(
-        `Le code "${formattedChoice}" est déjà attribué. Veuillez en choisir un autre ou laisser la génération automatique.`
+        `El código "${formattedChoice}" ya está asignado. Elige otro o permite la generación automática.`
       );
     }
 
@@ -91,7 +91,7 @@ export async function generateUniqueDonCode(
   }
 
   throw new Error(
-    `Impossible de générer un code unique après ${maxAttempts} tentatives. Veuillez réessayer.`
+    `No se pudo generar un código único después de ${maxAttempts} intentos. Inténtalo de nuevo.`
   );
 }
 
@@ -131,23 +131,23 @@ export function validateDonInput(data: {
   const rawCodeChoice = (data.codeChoice || "").trim().toUpperCase();
 
   if (!nom) {
-    errors.nom = "Le nom est obligatoire.";
+    errors.nom = "Los apellidos son obligatorios.";
   } else if (nom.length < 2) {
-    errors.nom = "Le nom doit contenir au moins 2 caractères.";
+    errors.nom = "Los apellidos deben tener al menos 2 caracteres.";
   }
 
   if (!prenom) {
-    errors.prenom = "Le prénom est obligatoire.";
+    errors.prenom = "El nombre es obligatorio.";
   } else if (prenom.length < 2) {
-    errors.prenom = "Le prénom doit contenir au moins 2 caractères.";
+    errors.prenom = "El nombre debe tener al menos 2 caracteres.";
   }
 
   if (!telephone) {
-    errors.telephone = "Le numéro de téléphone est obligatoire.";
+    errors.telephone = "El número de teléfono es obligatorio.";
   } else {
     const digitsOnly = telephone.replace(/\D/g, "");
     if (digitsOnly.length < 6) {
-      errors.telephone = "Veuillez entrer un numéro de téléphone valide (min. 6 chiffres).";
+      errors.telephone = "Introduce un número de teléfono válido (mínimo 6 dígitos).";
     }
   }
 
@@ -155,7 +155,7 @@ export function validateDonInput(data: {
   if (rawEmail) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(rawEmail)) {
-      errors.email = "L'adresse email saisie est invalide.";
+      errors.email = "La dirección de correo electrónico no es válida.";
     } else {
       email = rawEmail.toLowerCase();
     }
@@ -165,7 +165,7 @@ export function validateDonInput(data: {
   if (rawCodeChoice) {
     const codeFormatRegex = /^[A-Z]-[A-Z]\d{3}$/;
     if (!codeFormatRegex.test(rawCodeChoice)) {
-      errors.codeChoice = "Format de code invalide. Utilisez le format L1-L2NNN (ex: B-O028).";
+      errors.codeChoice = "Formato de código no válido. Usa el formato L1-L2NNN (por ejemplo: B-O028).";
     } else {
       codeChoice = rawCodeChoice;
     }
@@ -202,7 +202,7 @@ export function buildWhatsAppRedirect(
 
   const template =
     config.WHATSAPP_MESSAGE_TEMPLATE ||
-    "Bonjour {ADMIN_NAME}, je souhaite réclamer / obtenir mon don spécial.\nCode: {CODE}\nNom: {NOM} {PRENOM}\nTéléphone: {TELEPHONE}";
+    "Hola {ADMIN_NAME}, quiero solicitar mi donación especial.\nCódigo: {CODE}\nApellidos: {NOM} {PRENOM}\nTeléfono: {TELEPHONE}";
 
   const message = template
     .replace(/\{ADMIN_NAME\}/g, config.ADMIN_NAME || "")

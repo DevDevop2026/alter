@@ -6,6 +6,7 @@ import { HeroCarousel } from "@/components/HeroCarousel";
 import { PageShell } from "@/components/PageShell";
 import { PARTENAIRE_IMAGES, PROFIL_IMAGES } from "@/lib/gallery";
 import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
+import { useTranslation } from "react-i18next";
 
 /** Portraits réels de la communauté, servis depuis /public/images/profil. */
 const communityPhotos = PROFIL_IMAGES.map((image) => ({
@@ -16,6 +17,7 @@ const communityPhotos = PROFIL_IMAGES.map((image) => ({
 export default function AProposPage() {
   const [index, setIndex] = useState(0);
   const reducedMotion = usePrefersReducedMotion();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (reducedMotion) return;
@@ -35,9 +37,9 @@ export default function AProposPage() {
       }}
     >
       <PageShell
-        title="À propos d'Almira Aldahab Foundation"
-        eyebrow="Transparence • confiance"
-        description="Découvrez la Almira Aldahab Foundation, sa dirigeante Amira, l’initiative solidaire Projet Solidarité et les partenaires qui soutiennent sa vision."
+        title={t("about.title")}
+        eyebrow={t("about.eyebrow")}
+        description={t("about.description")}
       >
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div className="rounded-3xl border border-emerald-100 bg-(--color-surface-alt) p-4">
@@ -45,45 +47,45 @@ export default function AProposPage() {
               <Image
                 key={communityPhotos[index].src}
                 src={communityPhotos[index].src}
-                alt={communityPhotos[index].alt}
+                alt={t("about.communityImage", { number: index + 1 })}
                 fill
                 sizes="(max-width: 768px) 100vw, 45vw"
                 className="testimonial-fade h-full w-full object-contain"
               />
             </div>
             <p className="mt-4 text-center text-sm font-semibold text-slate-700">
-              Visages de la communauté solidaire
+              {t("about.community")}
             </p>
           </div>
 
           <div className="space-y-4 text-left">
             <div className="info-card">
-              <h2 className="text-xl font-semibold text-slate-900">🌍 À propos d&apos;Almira Aldahab Foundation</h2>
+              <h2 className="text-xl font-semibold text-slate-900">{t("about.heading")}</h2>
               <p className="mt-2 text-sm text-slate-600">
-                <strong>Projet Solidarité</strong> est l’initiative solidaire d’<strong>Almira Aldahab Foundation</strong>, dirigée par sa PDG <strong>Amira</strong>. Elle a pour objectif de rapprocher la générosité des participants grâce à un jeu solidaire accessible, une procédure claire et une communication transparente.
+                {t("about.intro")}
               </p>
             </div>
 
             <div className="info-card">
-              <h2 className="text-xl font-semibold text-slate-900">🎮 Comment ça marche ?</h2>
+              <h2 className="text-xl font-semibold text-slate-900">{t("about.how")}</h2>
               <ul className="mt-2 space-y-2 text-sm text-slate-600">
-                <li>• Chaque utilisateur remplit un formulaire avec son <strong>nom, prénom et numéro WhatsApp</strong>.</li>
-                <li>• Une fois validé, le système génère automatiquement un <strong>code alphanumérique de 8 caractères</strong>, unique pour chaque joueur.</li>
-                <li>• Ce code est ensuite envoyé directement aux organisateurs via WhatsApp.</li>
-                <li>• Les organisateurs vérifient le code et annoncent le lot gagné, qui est ensuite remis au participant.</li>
+                <li>• {t("about.step1")}</li>
+                <li>• {t("about.step2")}</li>
+                <li>• {t("about.step3")}</li>
+                <li>• {t("about.step4")}</li>
               </ul>
               <p className="mt-3 text-sm text-slate-600">
-                Chaque participant suit un parcours précis et ne peut participer qu’une seule fois, afin de renforcer l’équité, la fiabilité et la transparence du jeu solidaire.
+                {t("about.fairness")}
               </p>
             </div>
 
             <div className="info-card">
-              <h2 className="text-xl font-semibold text-slate-900">🌟 Notre vision</h2>
+              <h2 className="text-xl font-semibold text-slate-900">{t("about.vision")}</h2>
               <p className="mt-2 text-sm text-slate-600">
-                Nous croyons qu’une initiative solidaire peut être à la fois humaine, moderne et ludique. Projet Solidarité transforme une participation guidée en une occasion de découvrir la générosité, le partage et l’engagement communautaire.
+                {t("about.vision1")}
               </p>
               <p className="mt-3 text-sm text-slate-600">
-                <strong>Projet Solidarité</strong> est une communauté engagée, portée par la vision d’Amira et de la <strong>Almira Aldahab Foundation</strong>, où chaque participation représente une promesse de partage et d’espoir.
+                {t("about.vision2")}
               </p>
             </div>
           </div>
@@ -92,25 +94,28 @@ export default function AProposPage() {
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div className="rounded-3xl border border-emerald-100 bg-(--color-surface-alt) p-4">
             <HeroCarousel
-              slides={PARTENAIRE_IMAGES}
-              ariaLabel="Images des partenaires d'Almira Aldahab Foundation"
-              badgeLabel="Images"
+              slides={PARTENAIRE_IMAGES.map((slide, imageIndex) => ({
+                ...slide,
+                alt: t("about.partnerImage", { number: imageIndex + 1 }),
+              }))}
+              ariaLabel={t("about.partnersAlt")}
+              badgeLabel={t("about.images")}
               imageFit="contain"
             />
           </div>
 
           <div className="info-card text-left">
-            <h2 className="text-xl font-semibold text-slate-900">Partenariat</h2>
+            <h2 className="text-xl font-semibold text-slate-900">{t("about.partnership")}</h2>
             <p className="mt-2 text-sm text-slate-600">
-              Le projet est soutenu par des partenaires engagés aux côtés d’Almira Aldahab Foundation :
+              {t("about.partnerIntro")}
             </p>
             <ol className="mt-2 space-y-2 text-sm text-slate-600">
-              <li><strong>Partenaire 1 :</strong> Pépé Milionario – engagement, réussite et partage.</li>
-              <li><strong>Partenaire 2 :</strong> Keanu Reeves – solidarité, bienveillance et engagement humain.</li>
-              <li><strong>Partenaire 3 :</strong> Elon Musk – innovation, ambition et vision d’avenir.</li>
+              <li>{t("about.partner1")}</li>
+              <li>{t("about.partner2")}</li>
+              <li>{t("about.partner3")}</li>
             </ol>
             <p className="mt-3 text-sm text-slate-600">
-              Ces partenaires contribuent à faire connaître l’initiative solidaire et à donner du sens à chaque participation.
+              {t("about.partnerNote")}
             </p>
           </div>
         </div>

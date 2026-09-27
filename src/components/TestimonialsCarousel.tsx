@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Quote, Trophy } from "lucide-react";
 import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
+import { useTranslation } from "react-i18next";
 
 export interface Testimonial {
   name: string;
@@ -25,6 +26,7 @@ export function TestimonialsCarousel({
 }) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const { t } = useTranslation();
   const reducedMotion = usePrefersReducedMotion();
   const len = testimonials.length;
 
@@ -50,7 +52,7 @@ export function TestimonialsCarousel({
     <div
       role="region"
       aria-roledescription="carrousel"
-      aria-label="Témoignages des gagnants"
+      aria-label={t("testimonialCarousel.aria")}
       className="w-full max-w-4xl mx-auto"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -59,7 +61,7 @@ export function TestimonialsCarousel({
     >
       <div className="relative bg-slate-900 p-6 rounded-2xl border border-slate-800 shadow-xl">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-extrabold">Témoignages</h2>
+          <h2 className="text-xl font-extrabold">{t("testimonials.title")}</h2>
           <div className="text-sm text-slate-400">
             {index + 1} / {len}
           </div>
@@ -70,7 +72,7 @@ export function TestimonialsCarousel({
             <div className="relative mx-auto h-36 w-36 shrink-0 overflow-hidden rounded-2xl border border-slate-800 sm:mx-0 sm:h-40 sm:w-40">
               <Image
                 src={current.photo}
-                alt={`Photo de ${current.name}, participant(e) à l'initiative solidaire Projet Solidarité`}
+                alt={t("testimonialCarousel.photo", { name: current.name })}
                 fill
                 sizes="(max-width: 640px) 144px, 160px"
                 className="object-cover"
@@ -83,7 +85,7 @@ export function TestimonialsCarousel({
               <span className="relative block h-12 w-12 shrink-0 overflow-hidden rounded-full ring-2 ring-emerald-500/40">
                 <Image
                   src={current.avatar}
-                  alt={`Portrait de ${current.name}`}
+                  alt={t("testimonialCarousel.portrait", { name: current.name })}
                   fill
                   sizes="48px"
                   className="object-cover"
@@ -114,7 +116,7 @@ export function TestimonialsCarousel({
             <button
               type="button"
               onClick={() => goTo(index - 1)}
-              aria-label="Témoignage précédent"
+              aria-label={t("testimonialCarousel.previous")}
               className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-700 text-slate-300 transition-colors hover:border-emerald-500/60 hover:text-white"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -122,12 +124,12 @@ export function TestimonialsCarousel({
           )}
 
           <div className="flex items-center gap-2">
-            {testimonials.map((t, i) => (
+            {testimonials.map((testimonial, i) => (
               <button
-                key={t.name + i}
+                key={testimonial.name + i}
                 type="button"
                 onClick={() => setIndex(i)}
-                aria-label={`Afficher le témoignage ${i + 1}`}
+                aria-label={t("testimonialCarousel.show", { number: i + 1 })}
                 aria-current={i === index}
                 className={`h-2 rounded-full transition-all ${
                   i === index ? "w-6 bg-emerald-400" : "w-2 bg-slate-700 hover:bg-slate-600"
@@ -140,7 +142,7 @@ export function TestimonialsCarousel({
             <button
               type="button"
               onClick={() => goTo(index + 1)}
-              aria-label="Témoignage suivant"
+              aria-label={t("testimonialCarousel.next")}
               className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-700 text-slate-300 transition-colors hover:border-emerald-500/60 hover:text-white"
             >
               <ChevronRight className="h-4 w-4" />
@@ -154,6 +156,7 @@ export function TestimonialsCarousel({
 
 export function MiniTestimonials({ testimonials }: { testimonials: Testimonial[] }) {
   const reducedMotion = usePrefersReducedMotion();
+  const { t: translate } = useTranslation();
 
   if (testimonials.length === 0) return null;
 
@@ -172,7 +175,7 @@ export function MiniTestimonials({ testimonials }: { testimonials: Testimonial[]
                   <span className="relative block h-12 w-12 shrink-0 overflow-hidden rounded-full">
                     <Image
                       src={t.avatar}
-                      alt={`Portrait de ${t.name}`}
+                      alt={translate("testimonialCarousel.portrait", { name: t.name })}
                       fill
                       sizes="48px"
                       className="object-cover"

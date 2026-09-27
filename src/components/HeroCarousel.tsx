@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
 import type { MediaItem } from "@/lib/gallery";
 import { usePrefersReducedMotion } from "@/lib/useReducedMotion";
+import { useTranslation } from "react-i18next";
 
 type HeroCarouselProps = {
   slides: MediaItem[];
@@ -16,7 +17,7 @@ type HeroCarouselProps = {
   ariaLabel?: string;
   badgeLabel?: string;
   imageFit?: "cover" | "contain";
-  size?: "default" | "tall";
+  size?: "default" | "tall" | "compact";
   imagePosition?: "center" | "bottom";
   subtleBorder?: boolean;
 };
@@ -32,8 +33,8 @@ export function HeroCarousel({
   intervalMs = 5000,
   priority = true,
   className = "",
-  ariaLabel = "Images de l'initiative solidaire Projet Solidarité",
-  badgeLabel = "Preuves en images",
+  ariaLabel = "Community initiative images",
+  badgeLabel = "Images",
   imageFit = "cover",
   size = "default",
   imagePosition = "center",
@@ -41,6 +42,7 @@ export function HeroCarousel({
 }: HeroCarouselProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const { t } = useTranslation();
   const reducedMotion = usePrefersReducedMotion();
   const total = slides.length;
 
@@ -122,7 +124,7 @@ export function HeroCarousel({
             <button
               type="button"
               onClick={() => goTo(index - 1)}
-              aria-label="Image précédente"
+              aria-label={t("carousel.previous")}
               className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-800 shadow-md transition hover:bg-white"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -130,7 +132,7 @@ export function HeroCarousel({
             <button
               type="button"
               onClick={() => goTo(index + 1)}
-              aria-label="Image suivante"
+              aria-label={t("carousel.next")}
               className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white/85 text-slate-800 shadow-md transition hover:bg-white"
             >
               <ChevronRight className="h-4 w-4" />
@@ -146,7 +148,7 @@ export function HeroCarousel({
               key={`dot-${slide.src}`}
               type="button"
               onClick={() => goTo(i)}
-              aria-label={`Afficher l'image ${i + 1}`}
+              aria-label={t("carousel.show", { number: i + 1 })}
               aria-current={i === index}
               className={`h-1.5 rounded-full transition-all ${
                 i === index ? "w-6 bg-emerald-600" : "w-1.5 bg-emerald-900/25 hover:bg-emerald-700/40"

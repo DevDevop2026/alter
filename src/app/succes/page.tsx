@@ -21,6 +21,7 @@ import {
 import Link from "next/link";
 import { AudioAssistant } from "@/components/AudioAssistant";
 import { RECOMPENSE_SPOTLIGHT } from "@/lib/gallery";
+import { useTranslation } from "react-i18next";
 
 const RewardsGallery = dynamic(
   () => import("@/components/RewardsGallery").then((m) => m.RewardsGallery),
@@ -46,6 +47,7 @@ interface WhatsAppData {
 function SuccessContent() {
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
+  const { t, i18n } = useTranslation();
 
   const [don, setDon] = useState<DonData | null>(null);
   const [whatsapp, setWhatsapp] = useState<WhatsAppData | null>(null);
@@ -60,7 +62,7 @@ function SuccessContent() {
   // Load donation data
   useEffect(() => {
     if (!id) {
-      setError("Aucun identifiant trouvé.");
+      setError(t("success.noId"));
       setLoading(false);
       return;
     }
@@ -89,15 +91,15 @@ function SuccessContent() {
           setDon(data.don);
           setWhatsapp(data.whatsapp);
         } else {
-          setError(data.message || "Demande de don introuvable.");
+          setError(t("success.notFound"));
         }
       })
       .catch((err) => {
         console.error("Error fetching don:", err);
-        setError("Erreur de connexion lors de la récupération.");
+        setError(t("success.connectionError"));
       })
       .finally(() => setLoading(false));
-  }, [id]);
+  }, [id, t]);
 
   // Trigger Confetti Celebration — canvas-confetti est chargé à la demande
   useEffect(() => {
@@ -155,14 +157,14 @@ function SuccessContent() {
   };
 
   const successAudioScript = don
-    ? `Bravo et félicitations ${don.prenom} ! Votre code unique de don est : ${don.code}. L'application va ouvrir WhatsApp dans quelques secondes pour vous connecter directement avec l'administrateur. Vous pouvez aussi appuyer sur le grand bouton vert WhatsApp.`
-    : "Félicitations ! Votre code de don est prêt.";
+    ? t("success.audio", { name: don.prenom, code: don.code })
+    : t("success.audioFallback");
 
   if (loading) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-6 text-center">
         <div className="w-16 h-16 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mb-4" />
-        <p className="text-white text-lg font-bold">Chargement de votre code cadeau...</p>
+        <p className="text-white text-lg font-bold">{t("success.loading")}</p>
       </div>
     );
   }
@@ -173,14 +175,14 @@ function SuccessContent() {
         <div className="w-20 h-20 rounded-full bg-rose-500/20 border-2 border-rose-500/40 text-rose-400 flex items-center justify-center mx-auto mb-4 text-3xl">
           ⚠️
         </div>
-        <h2 className="text-2xl font-black text-white mb-2">Impossible d'afficher le code</h2>
-        <p className="text-slate-300 mb-6 font-medium">{error || "Don introuvable."}</p>
+        <h2 className="text-2xl font-black text-white mb-2">{t("success.unable")}</h2>
+        <p className="text-slate-300 mb-6 font-medium">{error || t("success.donMissing")}</p>
         <Link
           href="/"
           className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm transition-all"
         >
           <ArrowLeft className="w-5 h-5" />
-          <span>Retour au formulaire simple</span>
+          <span>{t("success.backForm")}</span>
         </Link>
       </div>
     );
@@ -195,18 +197,18 @@ function SuccessContent() {
         </div>
         <div>
           <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-black uppercase tracking-wider">
-            🎉 C'EST RÉUSSI !
+            {t("success.successBadge")}
           </span>
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-          Félicitations {don.prenom} !
+          {t("success.congratulations", { name: don.prenom })}
         </h1>
         <p className="text-slate-300 text-base max-w-md mx-auto font-medium">
-          Voici votre <strong className="text-emerald-400">Code Cadeau Unique</strong>. Donnez ce code à l'administrateur sur WhatsApp.
+          {t("success.codeIntro")}
         </p>
 
         <div className="pt-2 flex justify-center">
-          <AudioAssistant textToSpeak={successAudioScript} label="Écouter mon code en vocal 🔊" />
+          <AudioAssistant textToSpeak={successAudioScript} label={t("success.listen")} />
         </div>
       </div>
 
@@ -218,7 +220,7 @@ function SuccessContent() {
 
         <div className="relative z-10 space-y-4">
           <p className="text-xs sm:text-sm font-black uppercase tracking-widest text-emerald-400">
-            🔑 Votre Code Unique
+            🔑 {t("success.yourCode")}
           </p>
 
           <div className="inline-flex flex-col sm:flex-row items-center justify-center gap-3 bg-slate-950 border-2 border-emerald-500/50 rounded-3xl p-4 sm:p-6 shadow-inner">
@@ -232,19 +234,19 @@ function SuccessContent() {
               {copied ? (
                 <>
                   <Check className="w-5 h-5" />
-                  <span>Copié !</span>
+                  <span>{t("success.copied")}</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-5 h-5" />
-                  <span>Copier le Code</span>
+                  <span>{t("success.copy")}</span>
                 </>
               )}
             </button>
           </div>
 
           <p className="text-xs text-slate-400 font-semibold">
-            Ce code est enregistré dans la base de données.
+            {t("success.saved")}
           </p>
         </div>
       </div>
@@ -259,10 +261,10 @@ function SuccessContent() {
               </div>
               <div>
                 <h3 className="font-black text-white text-lg sm:text-xl">
-                  Ouverture de WhatsApp avec l'Admin
+                  {t("success.whatsappHeading")}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-300">
-                  Le message pré-rempli contenant votre code sera envoyé à l'administrateur.
+                  {t("success.whatsappDescription")}
                 </p>
               </div>
             </div>
@@ -270,11 +272,11 @@ function SuccessContent() {
             {countdown > 0 ? (
               <div className="bg-slate-950/80 px-4 py-2 rounded-2xl border border-emerald-500/30 text-center shrink-0">
                 <span className="font-mono font-black text-3xl text-emerald-400">{countdown}s</span>
-                <p className="text-[10px] text-slate-400 uppercase font-bold">Compte à rebours</p>
+                <p className="text-[10px] text-slate-400 uppercase font-bold">{t("success.countdown")}</p>
               </div>
             ) : (
               <span className="text-xs font-black text-emerald-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-emerald-500">
-                Redirection...
+                {t("success.redirecting")}
               </span>
             )}
           </div>
@@ -285,7 +287,7 @@ function SuccessContent() {
               className="w-full sm:flex-1 py-5 px-8 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-lg sm:text-xl shadow-2xl shadow-emerald-500/30 transition-transform hover:scale-102 flex items-center justify-center gap-3 cursor-pointer border-2 border-emerald-300"
             >
               <PhoneCall className="w-6 h-6" />
-              <span>Cliquer ici pour ouvrir WhatsApp</span>
+              <span>{t("success.openWhatsApp")}</span>
               <ExternalLink className="w-5 h-5" />
             </button>
 
@@ -293,7 +295,7 @@ function SuccessContent() {
               onClick={() => setIsPaused(!isPaused)}
               className="w-full sm:w-auto px-5 py-4 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition-colors cursor-pointer whitespace-nowrap"
             >
-              {isPaused ? "▶️ Reprendre le chrono" : "⏸️ Pause chrono"}
+              {isPaused ? t("success.resume") : t("success.pause")}
             </button>
           </div>
         </div>
@@ -302,29 +304,29 @@ function SuccessContent() {
       {/* RECAP CARD */}
       <div className="p-6 rounded-3xl bg-slate-900 border-2 border-slate-800 space-y-4 mb-8 shadow-xl">
         <h3 className="text-xs font-black uppercase tracking-wider text-slate-400 pb-2 border-b border-slate-800 flex items-center justify-between">
-          <span>Récapitulatif de votre Demande</span>
+          <span>{t("success.summary")}</span>
           <span className="text-xs text-emerald-400 font-bold bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/30">
-            ✓ Admin Notifié
+            {t("success.notified")}
           </span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm font-medium">
           <div>
-            <p className="text-xs text-slate-500 font-bold">Nom complet</p>
+            <p className="text-xs text-slate-500 font-bold">{t("success.fullName")}</p>
             <p className="font-extrabold text-white text-base">
               {don.nom} {don.prenom}
             </p>
           </div>
 
           <div>
-            <p className="text-xs text-slate-500 font-bold">Téléphone</p>
+            <p className="text-xs text-slate-500 font-bold">{t("success.phone")}</p>
             <p className="font-mono font-extrabold text-white text-base">{don.telephone}</p>
           </div>
 
           <div>
-            <p className="text-xs text-slate-500 font-bold">Date & heure</p>
+            <p className="text-xs text-slate-500 font-bold">{t("success.date")}</p>
             <p className="text-slate-300 text-xs">
-              {new Date(don.createdAt).toLocaleString("fr-FR")}
+              {new Date(don.createdAt).toLocaleString(i18n.resolvedLanguage === "en" ? "en-US" : "es-ES")}
             </p>
           </div>
         </div>
@@ -333,7 +335,7 @@ function SuccessContent() {
           <div className="mt-4 pt-4 border-t border-slate-800">
             <p className="text-xs text-slate-400 font-bold mb-1.5 flex items-center gap-1.5">
               <Share2 className="w-4 h-4 text-emerald-400" />
-              <span>Aperçu du message WhatsApp pré-rempli :</span>
+              <span>{t("success.messagePreview")}</span>
             </p>
             <pre className="p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-300 whitespace-pre-wrap leading-relaxed">
               {whatsapp.message}
@@ -346,10 +348,10 @@ function SuccessContent() {
       <section className="mb-8 rounded-3xl border border-emerald-500/25 bg-emerald-950/40 p-5 sm:p-6">
         <h3 className="mb-1 flex items-center gap-2 text-sm font-black uppercase tracking-wider text-amber-300">
           <Trophy className="w-4 h-4" />
-          Récompenses déjà remises à d’autres gagnants
+          {t("success.rewards")}
         </h3>
         <p className="mb-4 text-xs text-slate-300">
-          Votre don fait partie du même programme : chaque code validé par l’administrateur donne lieu à une remise réelle.
+          {t("success.rewardDescription")}
         </p>
         <RewardsGallery items={RECOMPENSE_SPOTLIGHT} initialCount={4} tone="dark" />
       </section>
@@ -360,7 +362,7 @@ function SuccessContent() {
           className="inline-flex items-center gap-2 text-sm font-bold text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Faire une autre demande de don spécial</span>
+          <span>{t("success.anotherRequest")}</span>
         </Link>
       </div>
     </div>

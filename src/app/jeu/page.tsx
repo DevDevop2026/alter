@@ -5,6 +5,7 @@ import Link from "next/link";
 import { HeroCarousel } from "@/components/HeroCarousel";
 import { PageShell } from "@/components/PageShell";
 import { HERO_SLIDES } from "@/lib/gallery";
+import { useTranslation } from "react-i18next";
 import {
   Sparkles,
   Play,
@@ -31,39 +32,17 @@ function generateCode(length = 8) {
   return result;
 }
 
-const PARTICIPATION_STEPS = [
-  {
-    step: 1,
-    title: "Cliquez sur le bouton “Entrer dans le jeu”",
-    desc: "Activez votre session de participation pour accéder directement au formulaire officiel.",
-  },
-  {
-    step: 2,
-    title: "Remplissez le formulaire d'inscription",
-    desc: "Renseignez correctement vos informations personnelles (Nom, Prénom, Pays, Numéro WhatsApp).",
-  },
-  {
-    step: 3,
-    title: "Génération automatique du code unique",
-    desc: "Après validation, le système génère automatiquement un code unique de 8 caractères alphanumériques.",
-  },
-  {
-    step: 4,
-    title: "Envoi du code via WhatsApp",
-    desc: "Envoyez ce code aux organisateurs via WhatsApp pour confirmer votre participation.",
-  },
-  {
-    step: 5,
-    title: "Vérification et attribution de votre don",
-    desc: "L’équipe vérifie votre code et vous informe de la suite du processus lié à votre don ou à votre récompense.",
-  },
-];
-
 export default function JeuPage() {
   const [started, setStarted] = useState(false);
   const [form, setForm] = useState({ nom: "", prenom: "", pays: "", tel: "" });
   const [code, setCode] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const { t } = useTranslation();
+  const participationSteps = [1, 2, 3, 4, 5].map((step) => ({
+    step,
+    title: t(`game.step${step}Title`),
+    desc: t(`game.step${step}Desc`),
+  }));
 
   const formSectionRef = useRef<HTMLDivElement>(null);
   const adminNumber = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER ?? DEFAULT_ADMIN_WHATSAPP;
@@ -97,7 +76,13 @@ export default function JeuPage() {
   }
 
   function buildWhatsAppUrl() {
-    const message = `Bonjour, je souhaite valider mon jeu.\nCode: ${code}\nNom: ${form.nom}\nPrénom: ${form.prenom}\nPays: ${form.pays}\nNuméro WhatsApp: ${form.tel}`;
+    const message = t("game.whatsappMessage", {
+      code,
+      lastName: form.nom,
+      firstName: form.prenom,
+      country: form.pays,
+      phone: form.tel,
+    });
     const encoded = encodeURIComponent(message);
     const cleaned = String(adminNumber).replace(/[^0-9+]/g, "");
     const waNumber = cleaned.replace(/^\+/, "");
@@ -107,9 +92,9 @@ export default function JeuPage() {
   return (
     <div className="min-h-screen bg-(--color-bg) text-slate-900 font-sans pb-16">
       <PageShell
-        title="Jeu Solidaire"
-        eyebrow="Projet Solidarité"
-        description="Participez à l’initiative solidaire d’Almira Aldahab Foundation, renseignez vos informations et obtenez votre code unique pour valider votre don."
+        title={t("game.title")}
+        eyebrow={t("game.eyebrow")}
+        description={t("game.description")}
       >
         <div className="space-y-10">
           {/* SECTION EN AVANT : COMMENT PARTICIPER */}
@@ -121,14 +106,14 @@ export default function JeuPage() {
               <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/20 px-3.5 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-emerald-300">
-                    <HelpCircle className="h-4 w-4" /> Guide officiel
+                    <HelpCircle className="h-4 w-4" /> {t("game.guide")}
                   </div>
 
                   <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl lg:text-4xl">
-                    Comment participer au jeu solidaire
+                    {t("game.heading")}
                   </h2>
                   <p className="mt-2 text-base font-medium text-emerald-100 sm:text-lg">
-                    Pour participer à <span className="font-bold text-white underline decoration-emerald-400">Projet Solidarité</span>, l’initiative solidaire d’Almira Aldahab Foundation :
+                    {t("game.intro")}
                   </p>
                 </div>
 
@@ -140,7 +125,7 @@ export default function JeuPage() {
                       className="group inline-flex items-center gap-3 rounded-2xl bg-emerald-500 px-8 py-4 text-base font-black text-slate-950 shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 hover:bg-emerald-400 cursor-pointer"
                     >
                       <Play className="h-5 w-5 fill-current text-slate-950 transition-transform group-hover:scale-110" />
-                      <span>Entrer dans le jeu</span>
+                      <span>{t("game.start")}</span>
                       <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </button>
                   </div>
@@ -149,7 +134,7 @@ export default function JeuPage() {
 
               {/* Étapes détaillées */}
               <div className="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {PARTICIPATION_STEPS.map((item, idx) => (
+                {participationSteps.map((item, idx) => (
                   <div
                     key={item.step}
                     className={`relative flex flex-col justify-between rounded-2xl border p-5 transition-transform hover:-translate-y-1 ${
@@ -165,7 +150,7 @@ export default function JeuPage() {
                         </span>
                         {item.step === 3 && (
                           <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[11px] font-bold text-amber-300">
-                            8 caractères
+                            {t("game.characters")}
                           </span>
                         )}
                       </div>
@@ -181,9 +166,9 @@ export default function JeuPage() {
 
                 <div className="flex flex-col justify-center rounded-2xl border border-emerald-500/30 bg-emerald-950/40 p-5 text-center">
                   <Sparkles className="mx-auto h-8 w-8 text-emerald-400" />
-                  <p className="mt-2 text-sm font-bold text-white">Participation 100% Gratuite</p>
+                  <p className="mt-2 text-sm font-bold text-white">{t("game.free")}</p>
                   <p className="mt-1 text-xs text-slate-300">
-                    Transparence totale garantie par Almira Aldahab Foundation.
+                    {t("game.transparency")}
                   </p>
                 </div>
               </div>
@@ -194,18 +179,22 @@ export default function JeuPage() {
           <section className="space-y-6">
             <div className="text-center">
               <h3 className="text-xl font-black text-slate-900">
-                Moments forts & Remise des dons
+                {t("game.moments")}
               </h3>
               <p className="text-xs text-slate-500 sm:text-sm">
-                Découvrez des images de l'initiative solidaire et des récompenses offertes.
+                {t("game.momentsDesc")}
               </p>
             </div>
 
             <div className="relative mx-auto max-w-3xl overflow-hidden rounded-3xl border border-emerald-200/80 bg-white p-3 shadow-lg sm:p-5">
               <HeroCarousel
-                slides={HERO_SLIDES}
-                ariaLabel="Photos officielles de la fondation"
-                badgeLabel="Initiative Almira"
+                slides={HERO_SLIDES.map((slide, index) => ({
+                  ...slide,
+                  alt: t("game.imageAlt", { number: index + 1 }),
+                  caption: t("game.imageCaption", { number: index + 1 }),
+                }))}
+                ariaLabel={t("game.carouselAlt")}
+                badgeLabel={t("game.carouselBadge")}
                 imageFit="cover"
                 size="compact"
                 imagePosition="center"
@@ -222,11 +211,11 @@ export default function JeuPage() {
                   className="group inline-flex items-center gap-3 rounded-full bg-emerald-600 px-8 py-4 text-base font-black text-white shadow-xl shadow-emerald-600/30 transition-all hover:scale-105 hover:bg-emerald-500 cursor-pointer"
                 >
                   <Play className="h-5 w-5 fill-current text-white transition-transform group-hover:scale-110" />
-                  <span>Entrer dans le jeu</span>
+                  <span>{t("game.start")}</span>
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </button>
                 <p className="mt-3 text-xs text-slate-500">
-                  Cliquez pour ouvrir le formulaire officiel ci-dessous.
+                  {t("game.openForm")}
                 </p>
               </div>
             )}
@@ -241,13 +230,13 @@ export default function JeuPage() {
                     <div>
                       <div className="border-b border-slate-100 pb-5 text-center">
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                          <Gift className="h-4 w-4" /> Formulaire officiel
+                          <Gift className="h-4 w-4" /> {t("game.formBadge")}
                         </span>
                         <h3 className="mt-3 text-2xl font-black text-slate-900 sm:text-3xl">
-                          Vos informations de participation
+                          {t("game.formHeading")}
                         </h3>
                         <p className="mt-2 text-sm text-slate-600">
-                          Remplissez le formulaire ci-dessous avec vos informations pour générer automatiquement votre code unique de 8 caractères alphanumériques.
+                          {t("game.formDescription")}
                         </p>
                       </div>
 
@@ -255,7 +244,7 @@ export default function JeuPage() {
                         <div className="grid gap-5 sm:grid-cols-2">
                           <div className="space-y-2">
                             <label htmlFor="nom" className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                              <User className="h-4 w-4 text-emerald-600" /> Nom *
+                              <User className="h-4 w-4 text-emerald-600" /> {t("game.lastName")} *
                             </label>
                             <input
                               id="nom"
@@ -264,14 +253,14 @@ export default function JeuPage() {
                               required
                               value={form.nom}
                               onChange={handleChange}
-                              placeholder="Votre nom"
+                              placeholder={t("game.lastNamePlaceholder")}
                               className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                             />
                           </div>
 
                           <div className="space-y-2">
                             <label htmlFor="prenom" className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                              <User className="h-4 w-4 text-emerald-600" /> Prénom *
+                              <User className="h-4 w-4 text-emerald-600" /> {t("game.firstName")} *
                             </label>
                             <input
                               id="prenom"
@@ -280,7 +269,7 @@ export default function JeuPage() {
                               required
                               value={form.prenom}
                               onChange={handleChange}
-                              placeholder="Votre prénom"
+                              placeholder={t("game.firstNamePlaceholder")}
                               className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                             />
                           </div>
@@ -289,7 +278,7 @@ export default function JeuPage() {
                         <div className="grid gap-5 sm:grid-cols-2">
                           <div className="space-y-2">
                             <label htmlFor="pays" className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                              <Globe className="h-4 w-4 text-emerald-600" /> Pays *
+                              <Globe className="h-4 w-4 text-emerald-600" /> {t("game.country")} *
                             </label>
                             <input
                               id="pays"
@@ -298,14 +287,14 @@ export default function JeuPage() {
                               required
                               value={form.pays}
                               onChange={handleChange}
-                              placeholder="Votre pays de résidence"
+                              placeholder={t("game.countryPlaceholder")}
                               className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                             />
                           </div>
 
                           <div className="space-y-2">
                             <label htmlFor="tel" className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-700">
-                              <Phone className="h-4 w-4 text-emerald-600" /> Numéro WhatsApp *
+                              <Phone className="h-4 w-4 text-emerald-600" /> {t("game.phone")} *
                             </label>
                             <input
                               id="tel"
@@ -314,14 +303,14 @@ export default function JeuPage() {
                               required
                               value={form.tel}
                               onChange={handleChange}
-                              placeholder="Ex: +33 6 12 34 56 78"
+                              placeholder={t("game.phonePlaceholder")}
                               className="w-full rounded-xl border border-slate-300 bg-slate-50/50 px-4 py-3 text-sm text-slate-900 transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                             />
                           </div>
                         </div>
 
                         <div className="rounded-xl border border-emerald-100 bg-emerald-50/60 p-4 text-xs text-emerald-800 leading-relaxed">
-                          💡 <strong>Vérification :</strong> Ces coordonnées permettront à l'équipe de vous identifier et de valider officiellement votre don.
+                          💡 <strong>{t("game.verification")}</strong> {t("game.verificationText")}
                         </div>
 
                         <div className="pt-3">
@@ -330,7 +319,7 @@ export default function JeuPage() {
                             className="w-full rounded-2xl bg-emerald-600 py-4 text-base font-black text-white shadow-lg shadow-emerald-600/30 transition-transform hover:-translate-y-0.5 hover:bg-emerald-500 cursor-pointer flex items-center justify-center gap-2"
                           >
                             <Sparkles className="h-5 w-5" />
-                            <span>Générer mon code</span>
+                            <span>{t("game.generate")}</span>
                           </button>
                         </div>
                       </form>
@@ -343,19 +332,19 @@ export default function JeuPage() {
 
                       <div>
                         <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">
-                          Code Unique Prêt
+                          {t("game.codeReady")}
                         </span>
                         <h3 className="mt-3 text-2xl font-black text-slate-900 sm:text-3xl">
-                          Félicitations, voici votre code !
+                          {t("game.congratulations")}
                         </h3>
                         <p className="mt-2 text-sm text-slate-600">
-                          Conservez ce code et transmettez-le directement aux organisateurs via WhatsApp.
+                          {t("game.keepCode")}
                         </p>
                       </div>
 
                       <div className="relative mx-auto max-w-sm rounded-2xl border-2 border-dashed border-emerald-500 bg-emerald-50/80 p-6 shadow-inner">
                         <p className="text-xs font-bold uppercase tracking-widest text-emerald-800">
-                          Code officiel de participation
+                          {t("game.officialCode")}
                         </p>
                         <div className="my-3 text-3xl font-black tracking-[0.35em] text-emerald-950 font-mono sm:text-4xl">
                           {code}
@@ -368,12 +357,12 @@ export default function JeuPage() {
                           {copied ? (
                             <>
                               <Check className="h-3.5 w-3.5 text-emerald-600" />
-                              <span>Copié dans le presse-papier !</span>
+                              <span>{t("game.copied")}</span>
                             </>
                           ) : (
                             <>
                               <Copy className="h-3.5 w-3.5" />
-                              <span>Copier le code</span>
+                              <span>{t("game.copy")}</span>
                             </>
                           )}
                         </button>
@@ -387,11 +376,11 @@ export default function JeuPage() {
                           className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-[#25D366] py-4 text-base font-black text-white shadow-xl shadow-green-600/25 transition-transform hover:-translate-y-0.5 hover:bg-[#20bd5a]"
                         >
                           <Send className="h-5 w-5" />
-                          <span>Envoyer le code aux organisateurs via WhatsApp</span>
+                          <span>{t("game.sendCode")}</span>
                         </a>
 
                         <p className="text-xs text-slate-500">
-                          L’équipe vérifie votre code et vous informe de la suite du processus lié à votre don ou à votre récompense.
+                          {t("game.followUp")}
                         </p>
                       </div>
 
@@ -400,7 +389,7 @@ export default function JeuPage() {
                           href="/"
                           className="text-xs font-bold text-slate-500 hover:text-emerald-700 underline"
                         >
-                          ← Retourner à la page d’accueil
+                          {t("game.backHome")}
                         </Link>
                       </div>
                     </div>
