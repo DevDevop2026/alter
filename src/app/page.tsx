@@ -11,7 +11,7 @@ import {
   RECOMPENSE_IMAGES,
   TEMOIGNAGE_IMAGES,
 } from "@/lib/gallery";
-import { Sparkles, Trophy, Gift, ArrowRight, ShieldCheck, Play } from "lucide-react";
+import { Sparkles, Trophy, ArrowRight, ShieldCheck, Play, Phone } from "lucide-react";
 
 const MiniTestimonials = dynamic(
   () => import("@/components/TestimonialsCarousel").then((m) => m.MiniTestimonials),
@@ -26,6 +26,12 @@ export default function HomePage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [wonPrizeName, setWonPrizeName] = useState("");
   const { t } = useTranslation();
+  const adminWhatsApp = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP_NUMBER ?? "351925396119";
+  const contactNumbers = [
+    { label: "WhatsApp", number: `+${adminWhatsApp.replace(/^\+/, "")}`, href: `https://wa.me/${adminWhatsApp.replace(/[^0-9]/g, "")}` },
+    { label: "Contact", number: "+393780520522", href: "https://wa.me/393780520522" },
+    { label: "Contact", number: "+31649825618", href: "https://wa.me/31649825618" },
+  ];
   const initiativeSlides = [
     { src: "/images/profil/1787386135816.jpg", alt: t("home.slideAlt"), caption: t("home.initiative") },
     { src: "/images/profil/1787389806776.jpg", alt: t("home.slideAlt"), caption: t("home.community") },
@@ -70,26 +76,41 @@ export default function HomePage() {
                 {t("home.intro1")}
               </p>
 
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                {t("home.intro2")}
-              </p>
-
-              <p className="mt-4 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
-                {t("home.intro3")}
-              </p>
+              {/* Numéros de contact */}
+              <div className="mt-6 pt-5 border-t border-slate-800/80">
+                <p className="text-xs font-bold uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-2">
+                  <Phone className="h-3.5 w-3.5" />
+                  <span>{t("contact.details")}</span>
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {contactNumbers.map((c, idx) => (
+                    <a
+                      key={idx}
+                      href={c.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={
+                        idx === 0
+                          ? "inline-flex items-center gap-2.5 rounded-xl border border-emerald-400/60 bg-emerald-900/60 px-4 py-2.5 text-sm font-mono font-black text-white shadow-lg shadow-emerald-500/20 ring-2 ring-emerald-400/30 transition-all hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-800/70"
+                          : "inline-flex items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-950/50 px-3.5 py-2 text-xs font-mono font-bold text-emerald-200 transition-colors hover:border-emerald-400 hover:bg-emerald-900/50 hover:text-white"
+                      }
+                    >
+                      <Phone className={idx === 0 ? "h-4 w-4 text-emerald-300" : "h-3.5 w-3.5 text-emerald-400"} />
+                      <span>{c.number}</span>
+                      {idx === 0 && (
+                        <span className="rounded-full bg-emerald-500/25 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-200">
+                          {c.label}
+                        </span>
+                      )}
+                    </a>
+                  ))}
+                </div>
+              </div>
 
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <Link
-                  href="/jeu"
-                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-emerald-500/25 transition-transform hover:-translate-y-0.5 hover:bg-emerald-400 font-bold"
-                >
-                  <Gift className="h-4 w-4" />
-                  <span>{t("home.donate")}</span>
-                </Link>
-
-                <Link
                   href="/a-propos"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-700 bg-slate-900/80 backdrop-blur-md px-6 py-3 text-sm font-semibold text-slate-200 transition-colors hover:border-emerald-500/50 hover:text-white"
+                  className="inline-flex items-center gap-2 rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-emerald-500/25 transition-transform hover:-translate-y-0.5 hover:bg-emerald-400 font-bold"
                 >
                   <ShieldCheck className="h-4 w-4" />
                   <span>{t("home.learnMore")}</span>
@@ -140,8 +161,8 @@ export default function HomePage() {
                 <li>3. {t("home.step3")}</li>
               </ol>
               <div className="mt-5">
-                <Link href="/jeu" className="inline-flex items-center gap-2 rounded-2xl bg-emerald-600 px-5 py-2.5 font-black text-white transition-transform hover:-translate-y-0.5 hover:bg-emerald-500">
-                  <Play className="h-4 w-4" />
+                <Link href="/jeu" className="inline-flex items-center gap-2 rounded-2xl bg-red-600 px-6 py-3 text-base font-black text-white shadow-lg shadow-red-600/30 transition-transform hover:-translate-y-0.5 hover:bg-red-500">
+                  <Play className="h-5 w-5 fill-current" />
                   <span>{t("home.enterGame")}</span>
                 </Link>
               </div>

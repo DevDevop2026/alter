@@ -122,9 +122,9 @@ export default function JeuPage() {
                     <button
                       type="button"
                       onClick={handleStart}
-                      className="group inline-flex items-center gap-3 rounded-2xl bg-emerald-500 px-8 py-4 text-base font-black text-slate-950 shadow-2xl shadow-emerald-500/40 transition-all hover:scale-105 hover:bg-emerald-400 cursor-pointer"
+                      className="group inline-flex items-center gap-3 rounded-2xl bg-red-600 px-8 py-4 text-base font-black text-white shadow-2xl shadow-red-600/40 transition-all hover:scale-105 hover:bg-red-500 cursor-pointer"
                     >
-                      <Play className="h-5 w-5 fill-current text-slate-950 transition-transform group-hover:scale-110" />
+                      <Play className="h-5 w-5 fill-current text-white transition-transform group-hover:scale-110" />
                       <span>{t("game.start")}</span>
                       <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                     </button>
@@ -208,9 +208,9 @@ export default function JeuPage() {
                 <button
                   type="button"
                   onClick={handleStart}
-                  className="group inline-flex items-center gap-3 rounded-full bg-emerald-600 px-8 py-4 text-base font-black text-white shadow-xl shadow-emerald-600/30 transition-all hover:scale-105 hover:bg-emerald-500 cursor-pointer"
+                  className="group inline-flex items-center gap-3 rounded-full bg-red-600 px-10 py-5 text-lg font-black text-white shadow-xl shadow-red-600/40 transition-all hover:scale-105 hover:bg-red-500 cursor-pointer"
                 >
-                  <Play className="h-5 w-5 fill-current text-white transition-transform group-hover:scale-110" />
+                  <Play className="h-6 w-6 fill-current text-white transition-transform group-hover:scale-110" />
                   <span>{t("game.start")}</span>
                   <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </button>
@@ -373,9 +373,9 @@ export default function JeuPage() {
                           href={buildWhatsAppUrl()}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-[#25D366] py-4 text-base font-black text-white shadow-xl shadow-green-600/25 transition-transform hover:-translate-y-0.5 hover:bg-[#20bd5a]"
+                          className="inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-[#25D366] py-5 text-lg font-black text-white shadow-2xl shadow-[#25D366]/40 ring-4 ring-[#25D366]/30 transition-all hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-[#20bd5a] hover:ring-[#25D366]/50"
                         >
-                          <Send className="h-5 w-5" />
+                          <Send className="h-6 w-6" />
                           <span>{t("game.sendCode")}</span>
                         </a>
 
